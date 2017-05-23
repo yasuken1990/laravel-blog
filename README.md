@@ -2,8 +2,7 @@
  Create a blog with Laravel.
 
 ## 目的
-Laravelの知識がないので、Blogを作ることで学び現在WordPressで実装しているブログと切り替える。
-機能は、WordPressを模倣する。
+Laravelの知識がないので、Blogを作ることで学び現在WordPressで実装しているブログと切り替える。  機能は、WordPressを模倣する。
 
 ## 実装する機能一覧
 ### 管理画面
