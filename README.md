@@ -1,4 +1,4 @@
-# laravel-blog
+# Laravel Blog
  Create a blog with Laravel.
 
 ## 目的
