@@ -15,7 +15,12 @@ Route::get('/', 'FrontController@index')->name('index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/admin', 'AdminController@index')->name('admin_index');
-Route::get('/admin/basic', 'AdminBasicController@index')->name('admin_basic_index');
-Route::put('/admin/basic', 'AdminBasicController@update')->name('admin_basic_update');
+Route::get('/admin', 'AdminController@index')->name('admin.index');
+Route::get('/admin/basic', 'AdminBasicController@index')->name('admin.basic.index');
+Route::put('/admin/basic', 'AdminBasicController@update')->name('admin.basic.update');
+Route::get('/admin/posts', 'AdminPostController@index')->name('admin.post.index');
+Route::get('/admin/posts/create', 'AdminPostController@create')->name('admin.post.create');
+Route::get('/admin/posts/edit', 'AdminPostController@edit')->name('admin.post.edit');
+Route::post('/admin/posts', 'AdminPostController@store')->name('admin.post.store');
+
 
