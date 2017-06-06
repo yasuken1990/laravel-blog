@@ -10,10 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', 'FrontController@index')->name('index');
 
 Auth::routes();
 
