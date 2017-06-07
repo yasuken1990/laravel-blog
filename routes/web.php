@@ -20,7 +20,7 @@ Route::get('/admin/basic', 'AdminBasicController@index')->name('admin.basic.inde
 Route::put('/admin/basic', 'AdminBasicController@update')->name('admin.basic.update');
 Route::get('/admin/posts', 'AdminPostController@index')->name('admin.post.index');
 Route::get('/admin/posts/create', 'AdminPostController@create')->name('admin.post.create');
-Route::get('/admin/posts/edit', 'AdminPostController@edit')->name('admin.post.edit');
 Route::post('/admin/posts', 'AdminPostController@store')->name('admin.post.store');
+Route::get('/admin/posts/edit/{id}', 'AdminPostController@edit')->name('admin.post.edit');
 
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Post;
 
 class AdminPostController extends Controller
 {
@@ -19,7 +21,8 @@ class AdminPostController extends Controller
     public function index()
     {
         // Post Index Page. Post List.
-        return view('admin.posts.index');
+        $posts = Post::all();
+        return view('admin.posts.index')->with('posts', $posts);
     }
 
     /**
@@ -42,6 +45,18 @@ class AdminPostController extends Controller
     public function store(Request $request)
     {
         // Store Create Post and Redirect Post Edit Page.
+        $posts = new Post();
+        $posts->title = $request->title;
+        $posts->link = $request->link;
+        $posts->content = $request->contents;
+        $posts->status = 1; // dummy
+        $posts->tag_id = 1; // dummy
+        $posts->category_id = 1; //dummy
+        $posts->created_at = Carbon::now();
+        $posts->updated_at = Carbon::now();
+        $posts->save();
+
+        return redirect('admin/posts');
     }
 
     /**
