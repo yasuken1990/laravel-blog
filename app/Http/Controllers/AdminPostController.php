@@ -77,12 +77,11 @@ class AdminPostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id = 1)
+    public function edit($id)
     {
         // Show Post Ediit Page.
-        // $post = Post::find($id);
-        // return view('admin.posts.edit')->with('post', $post);
-        return view('admin.posts.edit');
+        $post = Post::find($id);
+        return view('admin.posts.edit')->with('post', $post);
     }
 
     /**
@@ -95,6 +94,18 @@ class AdminPostController extends Controller
     public function update(Request $request, $id)
     {
         // Do Post Edit.
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->link = $request->link;
+        $post->content = $request->contents;
+        $post->status = 1; // dummy
+        $post->tag_id = 1; // dummy
+        $post->category_id = 1; //dummy
+        $post->created_at = Carbon::now();
+        $post->updated_at = Carbon::now();
+        $post->save();
+
+        return redirect('admin/posts/edit/' . $id);
     }
 
     /**
@@ -106,5 +117,8 @@ class AdminPostController extends Controller
     public function destroy($id)
     {
         // Do Post Delete.
+        POST::where('id', $id)->delete();
+        $posts = POST::all();
+        return view('admin.posts.index')->with('posts', $posts);
     }
 }

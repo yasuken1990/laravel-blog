@@ -4,18 +4,10 @@
 @section('description', '記事登録')
 @section('content')
     <div class="row">
-        <!-- left column -->
         <div class="col-md-12">
-            <!-- general form elements -->
             <div class="box box-primary">
                 {{Form::open(['method' => 'post', 'action' => 'AdminPostController@store'])}}
                 {{Form::token()}}
-                <div class="box-header with-border">
-                    <h3 class="box-title">-</h3>
-                </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-
                 <div class="box-body">
                     <div class="form-group">
                         <label for="sitetitle">記事タイトル</label>
@@ -33,16 +25,11 @@
 
                     </div>
                 </div>
-                <!-- /.box-body -->
-
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">作成</button>
                 </div>
                 {{Form::close()}}
             </div>
-            <!-- /.box -->
-
         </div>
-        <!--/.col (right) -->
     </div>
 @endsection

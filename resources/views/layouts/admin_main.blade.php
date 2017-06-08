@@ -30,7 +30,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src='https://cloud.tinymce.com/stable/tinymce.min.js'></script>
+    <script src='/tinymce/js/tinymce/tinymce.min.js'></script>
     <script>
         tinymce.init({
             selector: '#mytextarea'
