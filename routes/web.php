@@ -19,6 +19,9 @@ Route::get('/admin', 'AdminController@index')->name('admin.index');
 Route::get('/admin/basic', 'AdminBasicController@index')->name('admin.basic.index');
 Route::put('/admin/basic', 'AdminBasicController@update')->name('admin.basic.update');
 
+Route::get('/admin/user', 'AdminUserController@index')->name('admin.user.index');
+Route::put('/admin/user', 'AdminUserController@update')->name('admin.user.update');
+
 // Category
 Route::get('/admin/categories', 'AdminCategoryController@index')->name('admin.categories.index');
 Route::get('/admin/categories/create', 'AdminCategoryController@create')->name('admin.categories.create');
