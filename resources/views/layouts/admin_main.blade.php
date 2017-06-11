@@ -81,6 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <li><a href="{{ url('admin/basic') }}"><i class="fa fa-desktop"></i> <span>サイト管理</span></a></li>
                 <li><a href="{{ url('admin/posts') }}"><i class="fa fa-file-text-o"></i> <span>記事管理</span></a></li>
                 <li><a href="{{ url('admin/photos') }}"><i class="fa fa-file-picture-o"></i> <span>画像管理</span></a></li>
+                <li><a href="{{ url('admin/categories') }}"><i class="fa fa-folder-o"></i> <span>カテゴリ管理</span></a></li>
                 <li><a href="{{ url('admin/tags') }}"><i class="fa fa-tags"></i> <span>タグ管理</span></a></li>
                 <li><a href="{{ url('admin/comments') }}"><i class="fa fa-comments-o"></i> <span>コメント管理</span></a></li>
                 <li><a href="{{ url('admin/templates') }}"><i class="fa fa-files-o"></i> <span>テンプレ管理</span></a></li>

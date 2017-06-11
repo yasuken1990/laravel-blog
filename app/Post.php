@@ -17,8 +17,8 @@ class Post extends Model
         return $this->morphToMany('App\Tag', 'taggable');
     }
 
-    public function categories()
+    public function category()
     {
-        return $this->hasMany('App\Category');
+        return $this->belongsTo('App\Category');
     }
 }

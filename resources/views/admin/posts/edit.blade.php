@@ -11,9 +11,19 @@
                 {{Form::open(['method' => 'put', 'action' => ['AdminPostController@update', $post->id]])}}
                 {{Form::token()}}
                 <div class="box-header with-border">
-                    <h3 class="box-title">-</h3>
+                    <h3 class="box-title">記事ID: {{ $post->id }}</h3>
                 </div>
                 <div class="box-body">
+                    <div class="form-group">
+                        <label for="category_id">
+                            カテゴリ
+                        </label>
+                        @if ($post->category)
+                            {{Form::select('category_id', $category, $post->category->id)}}
+                        @else
+                            {{Form::select('category_id', $category, 1) }}
+                        @endif
+                    </div>
                     <div class="form-group">
                         <label for="sitetitle">記事タイトル</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="記事タイトル" value="{{ old('title', $post->title) }}">

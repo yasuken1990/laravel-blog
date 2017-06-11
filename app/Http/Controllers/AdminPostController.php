@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Post;
@@ -33,7 +34,12 @@ class AdminPostController extends Controller
     public function create()
     {
         // Show Create Post Page.
-        return view('admin.posts.create');
+        $categoies = Category::all();
+        $formCategory = [];
+        foreach ($categoies as $category) {
+            $formCategory[$category->id] = $category->name;
+        }
+        return view('admin.posts.create')->with('category', $formCategory);
     }
 
     /**
@@ -44,6 +50,14 @@ class AdminPostController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->validate($request, [
+            'title' => 'required|unique:posts|max:255',
+            'link' => 'required|unique:posts',
+            'contents' => 'required',
+
+        ]);
+
         // Store Create Post and Redirect Post Edit Page.
         $posts = new Post();
         $posts->title = $request->title;
@@ -51,7 +65,7 @@ class AdminPostController extends Controller
         $posts->content = $request->contents;
         $posts->status = 1; // dummy
         $posts->tag_id = 1; // dummy
-        $posts->category_id = 1; //dummy
+        $posts->category_id = $request->category_id; //dummy
         $posts->created_at = Carbon::now();
         $posts->updated_at = Carbon::now();
         $posts->save();
@@ -81,7 +95,12 @@ class AdminPostController extends Controller
     {
         // Show Post Ediit Page.
         $post = Post::find($id);
-        return view('admin.posts.edit')->with('post', $post);
+        $categoies = Category::all();
+        $formCategory = [];
+        foreach ($categoies as $category) {
+            $formCategory[$category->id] = $category->name;
+        }
+        return view('admin.posts.edit')->with('post', $post)->with('category', $formCategory);
     }
 
     /**
@@ -100,7 +119,7 @@ class AdminPostController extends Controller
         $post->content = $request->contents;
         $post->status = 1; // dummy
         $post->tag_id = 1; // dummy
-        $post->category_id = 1; //dummy
+        $post->category_id = $request->category_id; //dummy
         $post->created_at = Carbon::now();
         $post->updated_at = Carbon::now();
         $post->save();

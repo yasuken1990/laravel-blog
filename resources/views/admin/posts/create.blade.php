@@ -8,18 +8,34 @@
             <div class="box box-primary">
                 {{Form::open(['method' => 'post', 'action' => 'AdminPostController@store'])}}
                 {{Form::token()}}
+
                 <div class="box-body">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="form-group">
+                        <label for="category_id">
+                            カテゴリ
+                        </label>
+                        {{Form::select('category_id', $category, '1')}}
+                    </div>
                     <div class="form-group">
                         <label for="sitetitle">記事タイトル</label>
-                        <input type="text" name="title" class="form-control" id="title" placeholder="記事タイトル">
+                        <input type="text" name="title" class="form-control" id="title" placeholder="記事タイトル" value="{{ old('title') }}">
                     </div>
                     <div class="form-group">
                         <label for="link">記事リンク</label>
-                        <input type="text" name="link" class="form-control" id="link" placeholder="http://domain/[link]">
+                        <input type="text" name="link" class="form-control" id="link" placeholder="http://domain/[link]" value="{{ old('link') }}">
                     </div>
                     <div class="form-group">
                         <label for="contents">記事本文</label>
-                            <textarea id="mytextarea" name="contents">Hello, World!</textarea>
+                            <textarea id="mytextarea" name="contents" value="{{ old('contents') }}"></textarea>
                     </div>
                     <div class="form-group">
 

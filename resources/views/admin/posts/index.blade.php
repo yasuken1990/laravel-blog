@@ -13,6 +13,7 @@
                         <tr>
                             <th>ID</th>
                             <th>ステータス</th>
+                            <th>カテゴリ</th>
                             <th>タイトル</th>
                             <th>本文</th>
                             <th>日付</th>
@@ -22,6 +23,11 @@
                         @forelse($posts as $post)
                             <td>{{ $post->id }}</td>
                             <td><span class="label label-primary">Approved</span></td>
+                            @if (!empty($post->category))
+                            <td>{{ $post->category->name }}</td>
+                            @else
+                                <td>None</td>
+                            @endif
                             <td>{{ $post->title }}</td>
                             <td>{{ mb_strimwidth(strip_tags($post->content), 0, 30, '...', 'UTF-8') }}</td>
                             <td>{{ $post->created_at }}</td>
@@ -36,16 +42,10 @@
                         </tr>
                         @empty
                         @endforelse
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><button type="button" class="btn btn-primary" value="top" onClick="location.href='{{ url('admin/posts/create') }}'">作成</button></td>
-                        </tr>
-                        </tbody></table>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-success btn-lg btn-block" value="top" onClick="location.href='{{ url('admin/posts/create') }}'">記事作成</button>
+
                 </div>
             </div>
 

@@ -20,6 +20,12 @@ class AdminBasicController extends Controller
 
     public function update(Request $request)
     {
+        $this->validate($request, [
+            'sitetitle' => 'required',
+            'catchphrase' => 'required',
+
+        ]);
+
         $basics = Basics::find(1);
         $basics->sitetitle = $request->sitetitle;
         $basics->catchphrase = $request->catchphrase;
