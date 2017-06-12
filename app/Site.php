@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * あとこれだけクラス名が複数形。
  */
-class Basics extends Model
+class Site extends Model
 {
     //
 }
