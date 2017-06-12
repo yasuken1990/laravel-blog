@@ -21,8 +21,17 @@ class AdminPostController extends Controller
      */
     public function index()
     {
+        /**
+         * TODO: fix
+         * ここはさすがにページネーションがないとキツイんじゃ・・。
+         */
         // Post Index Page. Post List.
         $posts = Post::all();
+
+        /**
+         * TODO: fix
+         * Viewにデータを渡すのにwith() は使わない。
+         */
         return view('admin.posts.index')->with('posts', $posts);
     }
 
@@ -35,10 +44,20 @@ class AdminPostController extends Controller
     {
         // Show Create Post Page.
         $categoies = Category::all();
+        /**
+         * TODO: fix
+         * Collection::pluck() を使ってほしい。
+         * せっかくコレクションなのにもったいない。
+         */
         $formCategory = [];
         foreach ($categoies as $category) {
             $formCategory[$category->id] = $category->name;
         }
+
+        /**
+         * TODO: fix
+         * Viewにデータを渡すのにwith() は使わない。
+         */
         return view('admin.posts.create')->with('category', $formCategory);
     }
 
@@ -50,7 +69,10 @@ class AdminPostController extends Controller
      */
     public function store(Request $request)
     {
-
+        /**
+         * TODO: fix
+         * エラー処理ぃいい
+         */
         $this->validate($request, [
             'title' => 'required|unique:posts|max:255',
             'link' => 'required|unique:posts',
@@ -93,6 +115,10 @@ class AdminPostController extends Controller
      */
     public function edit($id)
     {
+        /**
+         * TODO: fix
+         * 同上
+         */
         // Show Post Ediit Page.
         $post = Post::find($id);
         $categoies = Category::all();
@@ -116,7 +142,16 @@ class AdminPostController extends Controller
         $post = Post::find($id);
         $post->title = $request->title;
         $post->link = $request->link;
+        /**
+         * TODO: fix
+         * 単数形と複数形なんてどっちでも良いとか思うなよ！！
+         * content => contents
+         */
         $post->content = $request->contents;
+        /**
+         * TODO: fix
+         * そのうちちゃんと定数にしてね。
+         */
         $post->status = 1; // dummy
         $post->tag_id = 1; // dummy
         $post->category_id = $request->category_id; //dummy
@@ -124,6 +159,11 @@ class AdminPostController extends Controller
         $post->updated_at = Carbon::now();
         $post->save();
 
+        /**
+         * TODO: fix
+         * 編集が完了したら編集画面に戻る。であってる？
+         * あってるなら、return back(); がいいよ。
+         */
         return redirect('admin/posts/edit/' . $id);
     }
 
@@ -135,6 +175,12 @@ class AdminPostController extends Controller
      */
     public function destroy($id)
     {
+        /**
+         * TODO: fix
+         * これ動作確認はまだしてないのかな。
+         * さすがに動かないよね・・。
+         * ここも最後はリダイレクトね。
+         */
         // Do Post Delete.
         POST::where('id', $id)->delete();
         $posts = POST::all();

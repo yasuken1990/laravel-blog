@@ -21,8 +21,19 @@ class AdminCategoryController extends Controller
      */
     public function index()
     {
+
+        /**
+         * TODO: fix
+         * ページネーションも出来るようになっておいてほしい。
+         */
         // Post Index Page. Post List.
         $categories = Category::all();
+
+        /**
+         * TODO: fix
+         * ここではwith（Session）は使わない。
+         * return view('admin.categories.index', compact('categories'));
+         */
         return view('admin.categories.index')->with('categories', $categories);
     }
 
@@ -46,7 +57,10 @@ class AdminCategoryController extends Controller
      */
     public function store(Request $request)
     {
-
+        /**
+         * TODO: fix
+         * AdminBasicControllerを参考に、エラー処理を入れてください。
+         */
         $this->validate($request, [
             'name' => 'required|unique:categories|max:255',
         ]);
@@ -68,6 +82,10 @@ class AdminCategoryController extends Controller
      */
     public function edit($id)
     {
+        /**
+         * TODO: fix
+         * 指定のidが見つからなかたときの処理を入れてください。
+         */
         // Show Post Ediit Page.
         $category = Category::find($id);
         return view('admin.categories.edit')->with('category', $category);
@@ -82,6 +100,11 @@ class AdminCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        /**
+         * TODO: fix
+         * storeメソッドと同様にエラー処理を行ってください。
+         * ここバリデーションないし。
+         */
         // Do Post Edit.
         $category = Category::find($id);
         $category->name = $request->name;
@@ -100,12 +123,28 @@ class AdminCategoryController extends Controller
      */
     public function destroy($id)
     {
+        /**
+         * TODO: fix
+         * const NONE = 1 なら、id = 1のカテゴリは存在できないってこと？
+         * 比較演算子は === とか !== を自信をもって使えないと、どこかでバグを出すと思う。
+         */
         // Do Post Delete.
         if ($id == Category::NONE) {
            redirect('admin/categories');
         } else {
+            /**
+             * TODO: fix
+             * Model::destroy($id)のほうがスマート。
+             */
             Category::where('id', $id)->delete();
         }
+
+        /**
+         * TODO: fix
+         * ここもリダイレクトだね。
+         * URIに複数系のものと単数形のものが混ざってるけど、何か意図がある？
+         * return redirect('admin/category');
+         */
         $categories = Category::all();
         return view('admin.categories.index')->with('categories', $categories);
     }
