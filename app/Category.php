@@ -11,5 +11,5 @@ class Category extends Model
      * 何がNONEなのかわからない。
      * そもそもこれは何のために必要な定数なのか。ナンだけに。
      */
-    const NONE = 1;
+    // カテゴリが何も先手腐れていない場合は、categories.id = 1 のカテゴリを使用します。
 }
