@@ -18,7 +18,17 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->string('link');
             $table->text('content');
+            /**
+             * TODO: fix
+             * _id はテーブルに持っているとき（リレーションがあるとき）に使ったほうがいいかも
+             * 将来はステータスもテーブル管理するならこれでも可。
+             */
             $table->integer('status_id');
+            /**
+             * TODO: fix
+             * １対多なら、外部キー制約があったほうが良い。
+             * あと、idが入るならunsignedも指定したい。
+             */
             $table->integer('category_id');
             $table->integer('tag_id');
             $table->timestamps();
