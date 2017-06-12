@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Basics;
+use App\Site;
 use App\Post;
 
 class FrontController extends Controller
@@ -11,8 +11,8 @@ class FrontController extends Controller
     //
     public function index()
     {
-        $basics = Basics::find(1);
+        $site = Site::find(1);
         $posts = Post::all();
-        return view('index')->with('basics', $basics)->with('posts', $posts);
+        return view('index')->with('site', $site)->with('posts', $posts);
     }
 }

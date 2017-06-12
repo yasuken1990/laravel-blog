@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Basics;
+use App\Site;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
-class AdminBasicController extends Controller
+class AdminSiteController extends Controller
 {
     public function __construct()
     {
@@ -16,8 +16,8 @@ class AdminBasicController extends Controller
 
     public function index()
     {
-        $basics = Basics::find(1);
-        return view('admin.basic')->with('basics', $basics);
+        $site = Site::find(1);
+        return view('admin.site')->with('site', $site);
     }
 
     public function update(Request $request)
@@ -37,17 +37,18 @@ class AdminBasicController extends Controller
          * 下にupdateSampleを書いておいたから参考にしてくださいー
          * コードの意味が理解できるまで調べること。
          */
+        // fix
         $this->validate($request, [
-            'sitetitle' => 'required',
-            'catchphrase' => 'required',
+            'title' => 'required',
+            'phrase' => 'required',
 
         ]);
 
         // id = 1 のレコードがなかったらエラー？
-        $basics = Basics::find(1);
-        $basics->sitetitle = $request->sitetitle;
-        $basics->catchphrase = $request->catchphrase;
-        $basics->save();
+        $site = Site::find(1);
+        $site->title = $request->title;
+        $site->phrase = $request->phrase;
+        $site->save();
 
         /**
          * TODO: fix
@@ -56,7 +57,7 @@ class AdminBasicController extends Controller
          * しかもPOSTしてるので、戻るボタンを押したとき警告が出るし、それを再送信してしまえば二重送信になる。
          * ここはredirectさせるべき。
          */
-        return view('admin.basic')->with('basics', $basics);
+        return redirect('admin/site');
     }
 
     /**

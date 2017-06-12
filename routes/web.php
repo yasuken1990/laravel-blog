@@ -16,8 +16,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin', 'AdminController@index')->name('admin.index');
-Route::get('/admin/basic', 'AdminBasicController@index')->name('admin.basic.index');
-Route::put('/admin/basic', 'AdminBasicController@update')->name('admin.basic.update');
+Route::get('/admin/site', 'AdminSiteController@index')->name('admin.site.index');
+Route::put('/admin/site', 'AdminSiteController@update')->name('admin.site.update');
 
 Route::get('/admin/user', 'AdminUserController@index')->name('admin.user.index');
 Route::put('/admin/user', 'AdminUserController@update')->name('admin.user.update');
