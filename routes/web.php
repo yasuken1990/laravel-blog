@@ -15,9 +15,9 @@ Route::get('/', 'FrontController@index')->name('index');
 Auth::routes();
 
 Route::get('/admin', 'AdminController@index')->name('admin.index');
-Route::get('/admin/site', 'AdminSiteController@index')->name('admin.site.index');
 Route::get('/admin/password', 'AdminPasswordController@index')->name('admin.password.index');
 Route::put('/admin/password', 'AdminPasswordController@update')->name('admin.password.update');
+Route::get('/admin/site', 'AdminSiteController@index')->name('admin.site.index');
 Route::put('/admin/site', 'AdminSiteController@update')->name('admin.site.update');
 
 
