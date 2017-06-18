@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 class AdminCategoryController extends Controller
 {
+    const PAGINATION = 5;
     //
     public function __construct()
     {
@@ -22,19 +23,10 @@ class AdminCategoryController extends Controller
     public function index()
     {
 
-        /**
-         * TODO: fix
-         * ページネーションも出来るようになっておいてほしい。
-         */
         // Post Index Page. Post List.
-        $categories = Category::all();
+        $categories = Category::paginate(self::PAGINATION);
 
-        /**
-         * TODO: fix
-         * ここではwith（Session）は使わない。
-         * return view('admin.categories.index', compact('categories'));
-         */
-        return view('admin.categories.index')->with('categories', $categories);
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -57,10 +49,6 @@ class AdminCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        /**
-         * TODO: fix
-         * AdminBasicControllerを参考に、エラー処理を入れてください。
-         */
         $this->validate($request, [
             'name' => 'required|unique:categories|max:255',
         ]);
@@ -71,7 +59,7 @@ class AdminCategoryController extends Controller
         $category->created_at = Carbon::now();
         $category->updated_at = Carbon::now();
         $category->save();
-        return redirect('admin/categories');
+        return redirect('admin/category');
     }
 
     /**
@@ -87,7 +75,7 @@ class AdminCategoryController extends Controller
          * 指定のidが見つからなかたときの処理を入れてください。
          */
         // Show Post Ediit Page.
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
         return view('admin.categories.edit')->with('category', $category);
     }
 
@@ -112,7 +100,7 @@ class AdminCategoryController extends Controller
         $category->updated_at = Carbon::now();
         $category->save();
 
-        return redirect('admin/categories');
+        return redirect('admin/category');
     }
 
     /**
