@@ -8,6 +8,16 @@
         <div class="col-md-12">
             <!-- general form elements -->
             <div class="box box-primary">
+                @if (session('success'))
+                    <div class="alert alert-success" onclick="this.classList.add('hidden')">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger" onclick="this.classList.add('hidden')">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 {{Form::open(['method' => 'put', 'action' => ['AdminCategoryController@update', $category->id]])}}
                 {{Form::token()}}
                 <div class="box-header with-border">

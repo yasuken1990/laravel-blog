@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AdminCategoryController extends Controller
 {
@@ -49,17 +50,40 @@ class AdminCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:categories|max:255',
-        ]);
 
-        // Store Create Post and Redirect Post Edit Page.
-        $category = new Category();
-        $category->name = $request->name;
-        $category->created_at = Carbon::now();
-        $category->updated_at = Carbon::now();
-        $category->save();
-        return redirect('admin/category');
+        try{
+            $this->validate($request, [
+                'name' => 'required|unique:categories|max:255',
+            ]);
+
+            // Store Create Post and Redirect Post Edit Page.
+            $category = new Category();
+            $category->name = $request->name;
+            $category->created_at = Carbon::now();
+            $category->updated_at = Carbon::now();
+            $category->save();
+
+            return redirect('admin/category')->with('success', '更新完了！');
+
+        } catch (ValidationException $e) {
+            // ここに入る場合はユーザの入力ミスだが、サポート時に必要ならログを取る
+            Log::warnning($e->getMessage());
+            Log::warnning($e->getTraceAsString());
+            Log::warnning(print_r($request->toArray(), true));
+
+            // リクエスト元のページに戻し、バリデーションエラーを表示する。
+            return back();
+        } catch (\Exception $e) {
+
+            // こっちはシステム的なエラーの可能性が高い。
+            // 必ずログを取り、必要に応じてアラートメールを飛ばす。
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            // ユーザにもこれはあなたのせいじゃないよって通知する。
+            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+
+        }
     }
 
     /**
@@ -76,7 +100,8 @@ class AdminCategoryController extends Controller
          */
         // Show Post Ediit Page.
         $category = Category::findOrFail($id);
-        return view('admin.categories.edit')->with('category', $category);
+
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
@@ -88,19 +113,36 @@ class AdminCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        /**
-         * TODO: fix
-         * storeメソッドと同様にエラー処理を行ってください。
-         * ここバリデーションないし。
-         */
-        // Do Post Edit.
-        $category = Category::find($id);
-        $category->name = $request->name;
-        $category->created_at = Carbon::now();
-        $category->updated_at = Carbon::now();
-        $category->save();
+        try{
+            $this->validate($request, [
+                'name' => 'required',
+            ]);
 
-        return redirect('admin/category');
+            Category::updateOrCreate([
+                'id' => $id
+            ], $request->except(['_token']));
+
+            return redirect('admin/category/edit/' . $id)->with('success', '更新完了！');
+
+        } catch (ValidationException $e) {
+            // ここに入る場合はユーザの入力ミスだが、サポート時に必要ならログを取る
+            Log::warnning($e->getMessage());
+            Log::warnning($e->getTraceAsString());
+            Log::warnning(print_r($request->toArray(), true));
+
+            // リクエスト元のページに戻し、バリデーションエラーを表示する。
+            return back();
+        } catch (\Exception $e) {
+
+            // こっちはシステム的なエラーの可能性が高い。
+            // 必ずログを取り、必要に応じてアラートメールを飛ばす。
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            // ユーザにもこれはあなたのせいじゃないよって通知する。
+            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+
+        }
     }
 
     /**
@@ -111,29 +153,8 @@ class AdminCategoryController extends Controller
      */
     public function destroy($id)
     {
-        /**
-         * TODO: fix
-         * const NONE = 1 なら、id = 1のカテゴリは存在できないってこと？
-         * 比較演算子は === とか !== を自信をもって使えないと、どこかでバグを出すと思う。
-         */
-        // Do Post Delete.
-        if ($id == Category::NONE) {
-           redirect('admin/categories');
-        } else {
-            /**
-             * TODO: fix
-             * Model::destroy($id)のほうがスマート。
-             */
-            Category::where('id', $id)->delete();
-        }
+        Category::destroy($id);
 
-        /**
-         * TODO: fix
-         * ここもリダイレクトだね。
-         * URIに複数系のものと単数形のものが混ざってるけど、何か意図がある？
-         * return redirect('admin/category');
-         */
-        $categories = Category::all();
-        return view('admin.categories.index')->with('categories', $categories);
+        return redirect('admin/category');
     }
 }
