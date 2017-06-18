@@ -14,10 +14,12 @@ Route::get('/', 'FrontController@index')->name('index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin', 'AdminController@index')->name('admin.index');
 Route::get('/admin/site', 'AdminSiteController@index')->name('admin.site.index');
+Route::get('/admin/password', 'AdminPasswordController@index')->name('admin.password.index');
+Route::put('/admin/password', 'AdminPasswordController@update')->name('admin.password.update');
 Route::put('/admin/site', 'AdminSiteController@update')->name('admin.site.update');
+
 
 Route::get('/admin/user', 'AdminUserController@index')->name('admin.user.index');
 Route::put('/admin/user', 'AdminUserController@update')->name('admin.user.update');
