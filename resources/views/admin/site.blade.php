@@ -8,6 +8,16 @@
         <div class="col-md-12">
             <!-- general form elements -->
             <div class="box box-primary">
+                @if (session('success'))
+                    <div class="alert alert-success" onclick="this.classList.add('hidden')">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger" onclick="this.classList.add('hidden')">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 @if (count($errors) > 0)
                     <div class="alert alert-danger">
                         <ul>
@@ -19,22 +29,22 @@
                 @endif
                 <!-- /.box-header -->
                 <!-- form start -->
-                {{Form::open(['method' => 'put', 'action' => 'AdminBasicController@update'])}}
+                {{Form::open(['method' => 'put', 'action' => 'AdminSiteController@update'])}}
                 {{Form::token()}}
                 <div class="box-body">
                         <div class="form-group">
-                            <label for="sitetitle">サイトタイトル</label>
-                            <input type="text" name="sitetitle" class="form-control" id="sitetitle" placeholder="サイトタイトル" value="{{ old('sitetitle', $basics->sitetitle) }}">
+                            <label for="title">サイトタイトル</label>
+                            <input type="text" name="title" class="form-control" id="sitetitle" placeholder="サイトタイトル" value="{{ old('title', $site->title) }}">
                         </div>
                         <div class="form-group">
                             <label for="catchphrase">キャッチフレーズ</label>
-                            <input type="text" name="catchphrase" class="form-control" id="catchphrase" placeholder="キャッチフレーズ" value="{{ old('catchphrase', $basics->catchphrase) }}">
+                            <input type="text" name="phrase" class="form-control" id="phrase" placeholder="キャッチフレーズ" value="{{ old('phrase', $site->phrase) }}">
                         </div>
                     </div>
                     <!-- /.box-body -->
 
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">更新</button>
                     </div>
                 {{Form::close()}}
             </div>

@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+
+    const PAGINATION = 10;
+
+    protected $fillable = ['title', 'link', 'content'];
+
     //
     public function comments()
     {

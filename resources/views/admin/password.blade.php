@@ -1,7 +1,7 @@
 @extends('layouts.admin_main')
-@section('h1', '記事管理')
-@section('title', '記事管理 | 編集')
-@section('description', '記事編集')
+@section('h1', 'パスワード管理')
+@section('title', '管理画面 | パスワード管理')
+@section('description', 'パスワード変更')
 @section('content')
     <div class="row">
         <!-- left column -->
@@ -18,22 +18,36 @@
                         {{ session('error') }}
                     </div>
                 @endif
-                {{Form::open(['method' => 'put', 'action' => ['AdminCategoryController@update', $category->id]])}}
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            <!-- /.box-header -->
+                <!-- form start -->
+                {{Form::open(['method' => 'put', 'action' => 'AdminPasswordController@update'])}}
                 {{Form::token()}}
-                <div class="box-header with-border">
-                    <h3 class="box-title">カテゴリID: {{ $category->id }}</h3>
-                </div>
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="name">カテゴリ名</label>
-                        <input type="text" name="name" class="form-control" id="name" placeholder="カテゴリ名" value="{{ old('name', $category->name) }}">
+                        <label for="password">パスワード</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="パスワード" value="{{ $user->passwords }}">
                     </div>
                 </div>
+                <!-- /.box-body -->
+
                 <div class="box-footer">
                     <button type="submit" class="btn btn-primary">更新</button>
+                    <a href="{{ url('admin/user') }}">ユーザ管理</a>
                 </div>
                 {{Form::close()}}
             </div>
+            <!-- /.box -->
+
         </div>
+        <!--/.col (right) -->
     </div>
 @endsection

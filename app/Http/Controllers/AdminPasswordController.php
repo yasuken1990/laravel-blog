@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
-class AdminUserController extends Controller
+class AdminPasswordController extends Controller
 {
+    //
     public function __construct()
     {
         $this->middleware('auth');
@@ -15,29 +17,22 @@ class AdminUserController extends Controller
 
     public function index()
     {
-        $user = User::find(1);
-        return view('admin.user')->with('user', $user);
+        $user = User::findOrFail(1);
+        return view('admin.password')->with('user', $user);
     }
 
     public function update(Request $request)
     {
-        /**
-         * TODO: fix
-         * 名前だけ変えて、パスワードは変えたくないときとかどうするのか。
-         * パスワードは入れ直す必要がある？もしその時入力ミスをしたらアウト？
-         */
         try {
             $this->validate($request, [
-                'name' => 'required',
-                'email' => 'required',
+                'password' => 'required',
             ]);
 
+            $request->user()->fill([
+                'password' => Hash::make($request->password)
+            ])->save();
 
-            User::updateOrCreate([
-                'id' => 1
-            ], $request->except(['_token']));
-
-            return redirect('admin/user')->with('success', '更新完了！');
+            return redirect('admin/password')->with('success', '更新完了！');
         } catch (ValidationException $e) {
             Log::warnning($e->getMessage());
             Log::warnning($e->getTraceAsString());
