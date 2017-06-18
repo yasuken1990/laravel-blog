@@ -8,6 +8,16 @@
         <div class="col-md-12">
             <!-- general form elements -->
             <div class="box box-primary">
+                @if (session('success'))
+                    <div class="alert alert-success" onclick="this.classList.add('hidden')">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger" onclick="this.classList.add('hidden')">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 @if (count($errors) > 0)
                     <div class="alert alert-danger">
                         <ul>
@@ -34,7 +44,7 @@
                     <!-- /.box-body -->
 
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">更新</button>
                     </div>
                 {{Form::close()}}
             </div>

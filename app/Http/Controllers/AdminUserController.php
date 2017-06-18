@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\Log;
 
 class AdminUserController extends Controller
 {
@@ -25,17 +26,29 @@ class AdminUserController extends Controller
          * 名前だけ変えて、パスワードは変えたくないときとかどうするのか。
          * パスワードは入れ直す必要がある？もしその時入力ミスをしたらアウト？
          */
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
+        try {
+            $this->validate($request, [
+                'name' => 'required',
+                'email' => 'required',
+            ]);
 
-        $user = User::find(1);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
-        return view('admin.user')->with('user', $user);
+
+            User::updateOrCreate([
+                'id' => 1
+            ], $request->except(['_token']));
+
+            return redirect('admin/user')->with('success', '更新完了！');
+        } catch (ValidationException $e) {
+            Log::warnning($e->getMessage());
+            Log::warnning($e->getTraceAsString());
+            Log::warnning(print_r($request->toArray(), true));
+
+            return back();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+        }
     }
 }
