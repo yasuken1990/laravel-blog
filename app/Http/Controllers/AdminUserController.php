@@ -21,17 +21,11 @@ class AdminUserController extends Controller
 
     public function update(Request $request)
     {
-        /**
-         * TODO: fix
-         * 名前だけ変えて、パスワードは変えたくないときとかどうするのか。
-         * パスワードは入れ直す必要がある？もしその時入力ミスをしたらアウト？
-         */
         try {
             $this->validate($request, [
                 'name' => 'required',
                 'email' => 'required',
             ]);
-
 
             User::updateOrCreate([
                 'id' => 1
