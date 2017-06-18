@@ -6,10 +6,11 @@ use App\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Facades\Log;
 
 class AdminPostController extends Controller
 {
-    const PAGINATION = 5;
+    const PAGINATION = 2;
 
     public function __construct()
     {
@@ -24,7 +25,7 @@ class AdminPostController extends Controller
     public function index()
     {
         // Post Index Page. Post List.
-        $posts = Category::paginate(self::PAGINATION);
+        $posts = Post::paginate(self::PAGINATION);
 
         return view('admin.posts.index', compact('posts'));
     }
@@ -37,22 +38,9 @@ class AdminPostController extends Controller
     public function create()
     {
         // Show Create Post Page.
-        $categoies = Category::all();
-        /**
-         * TODO: fix
-         * Collection::pluck() を使ってほしい。
-         * せっかくコレクションなのにもったいない。
-         */
-        $formCategory = [];
-        foreach ($categoies as $category) {
-            $formCategory[$category->id] = $category->name;
-        }
+        $category = Category::pluck('name', 'id');
 
-        /**
-         * TODO: fix
-         * Viewにデータを渡すのにwith() は使わない。
-         */
-        return view('admin.posts.create')->with('category', $formCategory);
+        return view('admin.posts.create', compact('category'));
     }
 
     /**
@@ -63,42 +51,43 @@ class AdminPostController extends Controller
      */
     public function store(Request $request)
     {
-        /**
-         * TODO: fix
-         * エラー処理ぃいい
-         */
-        $this->validate($request, [
-            'title' => 'required|unique:posts|max:255',
-            'link' => 'required|unique:posts',
-            'contents' => 'required',
+        try{
+            $this->validate($request, [
+                'title' => 'required|unique:posts|max:255',
+                'link' => 'required|unique:posts',
+                'content' => 'required',
+            ]);
 
-        ]);
+            $post = new Post();
+            $post->title = $request->title;
+            $post->link = $request->link;
+            $post->category_id = $request->category_id;
+            $post->status = 1; // dummy
+            $post->tag_id = 1; // dummy
+            $post->content = $request->content;
+            $post->save();
 
-        // Store Create Post and Redirect Post Edit Page.
-        $posts = new Post();
-        $posts->title = $request->title;
-        $posts->link = $request->link;
-        $posts->content = $request->contents;
-        $posts->status = 1; // dummy
-        $posts->tag_id = 1; // dummy
-        $posts->category_id = $request->category_id; //dummy
-        $posts->created_at = Carbon::now();
-        $posts->updated_at = Carbon::now();
-        $posts->save();
+            return redirect('admin/post')->with('success', '更新完了！');
 
-        return redirect('admin/posts');
-    }
+        } catch (ValidationException $e) {
+            dd($e);
+            // ここに入る場合はユーザの入力ミスだが、サポート時に必要ならログを取る
+            Log::warnning($e->getMessage());
+            Log::warnning($e->getTraceAsString());
+            Log::warnning(print_r($request->toArray(), true));
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        // Show Post Detail Page.
-        // Edit Pageあるしいらないか…?
+            // リクエスト元のページに戻し、バリデーションエラーを表示する。
+            return back();
+        } catch (\Exception $e) {
+            // こっちはシステム的なエラーの可能性が高い。
+            // 必ずログを取り、必要に応じてアラートメールを飛ばす。
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            // ユーザにもこれはあなたのせいじゃないよって通知する。
+            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+
+        }
     }
 
     /**
@@ -109,18 +98,11 @@ class AdminPostController extends Controller
      */
     public function edit($id)
     {
-        /**
-         * TODO: fix
-         * 同上
-         */
         // Show Post Ediit Page.
-        $post = Post::find($id);
-        $categoies = Category::all();
-        $formCategory = [];
-        foreach ($categoies as $category) {
-            $formCategory[$category->id] = $category->name;
-        }
-        return view('admin.posts.edit')->with('post', $post)->with('category', $formCategory);
+        $post = Post::findOrFail($id);
+        $category = Category::pluck('name', 'id');
+
+        return view('admin.posts.edit', compact('post', 'category'));
     }
 
     /**
@@ -132,33 +114,42 @@ class AdminPostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Do Post Edit.
-        $post = Post::find($id);
-        $post->title = $request->title;
-        $post->link = $request->link;
-        /**
-         * TODO: fix
-         * 単数形と複数形なんてどっちでも良いとか思うなよ！！
-         * content => contents
-         */
-        $post->content = $request->contents;
-        /**
-         * TODO: fix
-         * そのうちちゃんと定数にしてね。
-         */
-        $post->status = 1; // dummy
-        $post->tag_id = 1; // dummy
-        $post->category_id = $request->category_id; //dummy
-        $post->created_at = Carbon::now();
-        $post->updated_at = Carbon::now();
-        $post->save();
+        try {
+            $this->validate($request, [
+                'title' => 'required|unique:posts|max:255',
+                'link' => 'required|unique:posts',
+                'content' => 'required',
+            ]);
 
-        /**
-         * TODO: fix
-         * 編集が完了したら編集画面に戻る。であってる？
-         * あってるなら、return back(); がいいよ。
-         */
-        return redirect('admin/posts/edit/' . $id);
+            // Do Post Edit.
+            $post = Post::find($id);
+            $post->title = $request->title;
+            $post->link = $request->link;
+            $post->content = $request->content;
+            $post->status = 1; // dummy
+            $post->tag_id = 1; // dummy
+            $post->category_id = $request->category_id; //dummy
+            $post->save();
+
+            return back()->with('success', '更新完了！');
+        } catch (ValidationException $e) {
+            // ここに入る場合はユーザの入力ミスだが、サポート時に必要ならログを取る
+            Log::warnning($e->getMessage());
+            Log::warnning($e->getTraceAsString());
+            Log::warnning(print_r($request->toArray(), true));
+
+            // リクエスト元のページに戻し、バリデーションエラーを表示する。
+            return back();
+        } catch (\Exception $e) {
+            // こっちはシステム的なエラーの可能性が高い。
+            // 必ずログを取り、必要に応じてアラートメールを飛ばす。
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            // ユーザにもこれはあなたのせいじゃないよって通知する。
+            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+
+        }
     }
 
     /**
@@ -169,15 +160,9 @@ class AdminPostController extends Controller
      */
     public function destroy($id)
     {
-        /**
-         * TODO: fix
-         * これ動作確認はまだしてないのかな。
-         * さすがに動かないよね・・。
-         * ここも最後はリダイレクトね。
-         */
         // Do Post Delete.
-        POST::where('id', $id)->delete();
-        $posts = POST::all();
-        return view('admin.posts.index')->with('posts', $posts);
+        POST::destroy($id);
+
+        return redirect('admin/post');
     }
 }

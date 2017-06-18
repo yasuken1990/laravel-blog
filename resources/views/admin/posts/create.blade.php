@@ -34,8 +34,8 @@
                         <input type="text" name="link" class="form-control" id="link" placeholder="http://domain/[link]" value="{{ old('link') }}">
                     </div>
                     <div class="form-group">
-                        <label for="contents">記事本文</label>
-                            <textarea id="mytextarea" name="contents" value="{{ old('contents') }}"></textarea>
+                        <label for="content">記事本文</label>
+                            <textarea id="mytextarea" name="content" value="{{ old('content') }}"></textarea>
                     </div>
                     <div class="form-group">
 
