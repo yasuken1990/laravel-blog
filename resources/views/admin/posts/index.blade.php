@@ -31,7 +31,7 @@
                             <td>{{ $post->title }}</td>
                             <td>{{ mb_strimwidth(strip_tags($post->content), 0, 30, '...', 'UTF-8') }}</td>
                             <td>{{ $post->created_at }}</td>
-                            <td><button type="button" class="btn btn-primary" value="top" onClick="location.href='{{ url('admin/posts/edit/' . $post->id) }}'">編集</button></td>
+                            <td><button type="button" class="btn btn-primary" value="top" onClick="location.href='{{ url('admin/post/edit/' . $post->id) }}'">編集</button></td>
                             <td>
                                 <form action="{{ action('AdminPostController@destroy', $post->id) }}" id="form_{{ $post->id }}" method="post">
                                     {{ method_field('delete') }}
@@ -44,7 +44,12 @@
                         @endforelse
                         </tbody>
                     </table>
-                    <button type="button" class="btn btn-success btn-lg btn-block" value="top" onClick="location.href='{{ url('admin/posts/create') }}'">記事作成</button>
+                    <div class="text-center">
+                        <div>
+                            {{ $posts->appends(['sort' => 'votes'])->links() }}
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success btn-lg btn-block" value="top" onClick="location.href='{{ url('admin/post/create') }}'">記事作成</button>
 
                 </div>
             </div>

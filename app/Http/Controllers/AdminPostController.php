@@ -9,6 +9,8 @@ use App\Post;
 
 class AdminPostController extends Controller
 {
+    const PAGINATION = 5;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -21,18 +23,10 @@ class AdminPostController extends Controller
      */
     public function index()
     {
-        /**
-         * TODO: fix
-         * ここはさすがにページネーションがないとキツイんじゃ・・。
-         */
         // Post Index Page. Post List.
-        $posts = Post::all();
+        $posts = Category::paginate(self::PAGINATION);
 
-        /**
-         * TODO: fix
-         * Viewにデータを渡すのにwith() は使わない。
-         */
-        return view('admin.posts.index')->with('posts', $posts);
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
