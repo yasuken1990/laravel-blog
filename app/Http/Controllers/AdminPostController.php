@@ -38,7 +38,8 @@ class AdminPostController extends Controller
     public function create()
     {
         // Show Create Post Page.
-        $category = Category::pluck('name', 'id');
+        $category = Category::all()->pluck('name', 'id');
+        dd($category);
 
         return view('admin.posts.create', compact('category'));
     }
@@ -94,7 +95,7 @@ class AdminPostController extends Controller
     {
         // Show Post Ediit Page.
         $post = Post::findOrFail($id);
-        $category = Category::pluck('name', 'id');
+        $category = Category::all()->pluck('name', 'id');
 
         return view('admin.posts.edit', compact('post', 'category'));
     }
