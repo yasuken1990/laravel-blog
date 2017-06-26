@@ -13,6 +13,6 @@ class FrontController extends Controller
     {
         $site = Site::find(1);
         $posts = Post::all();
-        return view('index')->with('site', $site)->with('posts', $posts);
+        return view('index', compact('site', 'posts'));
     }
 }
