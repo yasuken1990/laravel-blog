@@ -25,11 +25,11 @@
                         @endif
                     </div>
                     <div class="form-group">
-                        <label for="category_id">
+                        <label for="status">
                             公開ステータス
                         </label>
                         @if ($post->status)
-                            {{Form::select('category_id', $status, $post->status)}}
+                            {{Form::select('status', $status, $post->status)}}
                         @else
                             {{Form::select('status', $status, 0) }}
                         @endif

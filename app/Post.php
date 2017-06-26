@@ -11,7 +11,7 @@ class Post extends Model
     const STATUS_PRIVATE = 0;
     const STATUS_PUBLIC = 1;
 
-    protected $fillable = ['title', 'link', 'content', 'status'];
+    protected $fillable = ['title', 'link', 'content', 'status', 'tag_id', 'category_id', 'content'];
 
     //
     public function comments()

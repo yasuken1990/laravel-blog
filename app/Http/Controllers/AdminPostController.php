@@ -27,8 +27,8 @@ class AdminPostController extends Controller
     {
         // Post Index Page. Post List.
         $posts = Post::paginate(self::PAGINATION);
-
-        return view('admin.posts.index', compact('posts'));
+        $status = Post::getStatus();
+        return view('admin.posts.index', compact('posts', 'status'));
     }
 
     /**
@@ -122,9 +122,9 @@ class AdminPostController extends Controller
             $post->title = $request->title;
             $post->link = $request->link;
             $post->content = $request->content;
-            $post->status = 1; // dummy
+            $post->status = $request->status;
             $post->tag_id = 1; // dummy
-            $post->category_id = $request->category_id; //dummy
+            $post->category_id = $request->category_id;
             $post->save();
 
             return back()->with('success', '更新完了！');

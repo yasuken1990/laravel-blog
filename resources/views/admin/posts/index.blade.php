@@ -22,7 +22,7 @@
                         </tr>
                         @forelse($posts as $post)
                             <td>{{ $post->id }}</td>
-                            <td><span class="label label-primary">Approved</span></td>
+                            <td><span class="label label-primary">{{ $status[$post->status] }}</span></td>
                             @if (!empty($post->category))
                             <td>{{ $post->category->name }}</td>
                             @else
