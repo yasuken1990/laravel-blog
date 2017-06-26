@@ -25,6 +25,16 @@
                         @endif
                     </div>
                     <div class="form-group">
+                        <label for="category_id">
+                            公開ステータス
+                        </label>
+                        @if ($post->status)
+                            {{Form::select('category_id', $status, $post->status)}}
+                        @else
+                            {{Form::select('status', $status, 0) }}
+                        @endif
+                    </div>
+                    <div class="form-group">
                         <label for="sitetitle">記事タイトル</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="記事タイトル" value="{{ old('title', $post->title) }}">
                     </div>

@@ -20,6 +20,12 @@
                         </div>
                     @endif
                     <div class="form-group">
+                        <label for="status">
+                            公開ステータス
+                        </label>
+                        {{Form::select('status', $status, 0)}}
+                    </div>
+                    <div class="form-group">
                         <label for="category_id">
                             カテゴリ
                         </label>

@@ -8,8 +8,10 @@ class Post extends Model
 {
 
     const PAGINATION = 10;
+    const STATUS_PRIVATE = 0;
+    const STATUS_PUBLIC = 1;
 
-    protected $fillable = ['title', 'link', 'content'];
+    protected $fillable = ['title', 'link', 'content', 'status'];
 
     //
     public function comments()
@@ -25,5 +27,13 @@ class Post extends Model
     public function category()
     {
         return $this->belongsTo('App\Category');
+    }
+
+    static function getStatus()
+    {
+        return collect([
+            self::STATUS_PRIVATE => '非公開',
+            self::STATUS_PUBLIC => '公開'
+        ]);
     }
 }

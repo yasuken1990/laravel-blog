@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use App\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Post;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AdminPostController extends Controller
 {
@@ -39,9 +40,9 @@ class AdminPostController extends Controller
     {
         // Show Create Post Page.
         $category = Category::all()->pluck('name', 'id');
-        dd($category);
+        $status = Post::getStatus();
 
-        return view('admin.posts.create', compact('category'));
+        return view('admin.posts.create', compact('category', 'status'));
     }
 
     /**
@@ -63,7 +64,7 @@ class AdminPostController extends Controller
             $post->title = $request->title;
             $post->link = $request->link;
             $post->category_id = $request->category_id;
-            $post->status = 1; // dummy
+            $post->status = $request->status;
             $post->tag_id = 1; // dummy
             $post->content = $request->content;
             $post->save();
@@ -95,9 +96,9 @@ class AdminPostController extends Controller
     {
         // Show Post Ediit Page.
         $post = Post::findOrFail($id);
+        $status = Post::getStatus();
         $category = Category::all()->pluck('name', 'id');
-
-        return view('admin.posts.edit', compact('post', 'category'));
+        return view('admin.posts.edit', compact('post', 'category', 'status'));
     }
 
     /**
