@@ -18,7 +18,7 @@ class AdminSiteController extends Controller
     public function index()
     {
         $site = Site::find(1);
-        return view('admin.site')->with('site', $site);
+        return view('admin.site', compact('site'));
     }
 
     public function update(Request $request)

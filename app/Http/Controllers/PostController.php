@@ -48,7 +48,7 @@ class PostController extends Controller
     {
         //
         $post = Post::where('link', $link)->first();
-        return view('posts.detail')->with('post', $post);
+        return view('posts.detail', compact('post', $post));
     }
 
     /**

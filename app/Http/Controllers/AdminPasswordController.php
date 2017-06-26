@@ -18,7 +18,7 @@ class AdminPasswordController extends Controller
     public function index()
     {
         $user = User::findOrFail(1);
-        return view('admin.password')->with('user', $user);
+        return view('admin.password', compact('user'));
     }
 
     public function update(Request $request)

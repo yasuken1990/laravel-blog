@@ -16,7 +16,7 @@ class AdminUserController extends Controller
     public function index()
     {
         $user = User::find(1);
-        return view('admin.user')->with('user', $user);
+        return view('admin.user', compact('user'));
     }
 
     public function update(Request $request)
