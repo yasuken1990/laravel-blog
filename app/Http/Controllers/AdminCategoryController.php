@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Log;
 
 class AdminCategoryController extends Controller
 {
+    /**
+     * TODO: fix
+     * これだと定数値の意味が、使われてる箇所を読むまでわらからない。ページネーションが5って何の数字だろう？ってなる
+     * 例えば「PAGINATION_PER_PAGE」とかにする。
+     */
     const PAGINATION = 5;
     //
     public function __construct()
@@ -66,6 +71,12 @@ class AdminCategoryController extends Controller
             return redirect('admin/category')->with('success', '更新完了！');
 
         } catch (ValidationException $e) {
+            /**
+             * TODO: fix
+             * 綴は直してくれないんですかね。
+             * エラーの中はエラーを出さないと確認できないから要注意。
+             * ここ、動作の確認はできてるの？
+             */
             Log::warnning($e->getMessage());
             Log::warnning($e->getTraceAsString());
             Log::warnning(print_r($request->toArray(), true));
@@ -89,6 +100,10 @@ class AdminCategoryController extends Controller
     public function edit($id)
     {
         // Show Post Ediit Page.
+        /**
+         * TODO: fix
+         * failになって、エラーが発生したらどうするの？
+         */
         $category = Category::findOrFail($id);
 
         return view('admin.categories.edit', compact('category'));
@@ -108,6 +123,10 @@ class AdminCategoryController extends Controller
                 'name' => 'required',
             ]);
 
+            /**
+             * TODO: fix
+             * orCreateが付いてるのはどういう意図？
+             */
             Category::updateOrCreate([
                 'id' => $id
             ], $request->except(['_token']));
