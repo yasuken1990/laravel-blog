@@ -6,16 +6,13 @@ use App\Category;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AdminCategoryController extends Controller
 {
-    /**
-     * TODO: fix
-     * これだと定数値の意味が、使われてる箇所を読むまでわらからない。ページネーションが5って何の数字だろう？ってなる
-     * 例えば「PAGINATION_PER_PAGE」とかにする。
-     */
-    const PAGINATION = 5;
-    //
+    const PAGINATION_PER_PAGE = 5;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -30,7 +27,7 @@ class AdminCategoryController extends Controller
     {
 
         // Post Index Page. Post List.
-        $categories = Category::paginate(self::PAGINATION);
+        $categories = Category::paginate(self::PAGINATION_PER_PAGE);
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -63,7 +60,7 @@ class AdminCategoryController extends Controller
 
             // Store Create Post and Redirect Post Edit Page.
             $category = new Category();
-            $category->name = $request->name;
+            $category->name = $request->input('name');
             $category->created_at = Carbon::now();
             $category->updated_at = Carbon::now();
             $category->save();
@@ -71,18 +68,14 @@ class AdminCategoryController extends Controller
             return redirect('admin/category')->with('success', '更新完了！');
 
         } catch (ValidationException $e) {
-            /**
-             * TODO: fix
-             * 綴は直してくれないんですかね。
-             * エラーの中はエラーを出さないと確認できないから要注意。
-             * ここ、動作の確認はできてるの？
-             */
+
             Log::warning($e->getMessage());
             Log::warning($e->getTraceAsString());
             Log::warning(print_r($request->toArray(), true));
 
             return back();
         } catch (\Exception $e) {
+
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
 
@@ -97,16 +90,26 @@ class AdminCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    // $id = 0 にしておくけれど、何かいい方法はないかな…　yasuken
+    public function edit($id = 0)
     {
         // Show Post Ediit Page.
-        /**
-         * TODO: fix
-         * failになって、エラーが発生したらどうするの？
-         */
-        $category = Category::findOrFail($id);
 
-        return view('admin.categories.edit', compact('category'));
+        try {
+            $category = Category::findOrFail($id);
+
+            return view('admin.categories.edit', compact('category'));
+        } catch (ModelNotFoundException $e) {
+            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
+
+            return back()->with('error', "ID:{$id}の、カテゴリは存在しません。");
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', '予期せぬエラーが発生しました。');
+        }
     }
 
     /**
@@ -118,21 +121,22 @@ class AdminCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try{
+        try {
             $this->validate($request, [
                 'name' => 'required',
             ]);
 
-            /**
-             * TODO: fix
-             * orCreateが付いてるのはどういう意図？
-             */
-            Category::updateOrCreate([
-                'id' => $id
-            ], $request->except(['_token']));
+            $category = Category::findOrFail($id);
+            $category->name = $request->input('name');
+            $category->save();
 
             return redirect('admin/category/edit/' . $id)->with('success', '更新完了！');
+        } catch (ModelNotFoundException $e) {
+            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
+            Log::warning(print_r($request->toArray(), true));
 
+            return back()->with('error', '不正なリクエストです。');
         } catch (ValidationException $e) {
             Log::warning($e->getMessage());
             Log::warning($e->getTraceAsString());
@@ -143,7 +147,7 @@ class AdminCategoryController extends Controller
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
 
-            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+            return back()->with('error', '予期せぬエラーが発生しました。');
 
         }
     }
