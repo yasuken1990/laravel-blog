@@ -34,15 +34,15 @@ class AdminPasswordController extends Controller
 
             return redirect('admin/password')->with('success', '更新完了！');
         } catch (ValidationException $e) {
-            Log::warnning($e->getMessage());
-            Log::warnning($e->getTraceAsString());
+            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
             /**
              * TODO: fix
              * 今回はrequiredだけだけど、バリデーションエラーが起きたとき、これだとユーザの入力値がログに出力される。
              * つまりユーザしか知り得ないはずのパスワードが記録される。データベースに生のパスワードを入れるのと変わらないよね。
              * コピペするなら、せめてちゃんと意味を理解してからにしましょう。
              */
-            Log::warnning(print_r($request->toArray(), true));
+            Log::warning(print_r($request->toArray(), true));
 
             return back();
         } catch (\Exception $e) {

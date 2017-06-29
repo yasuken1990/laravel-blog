@@ -77,9 +77,9 @@ class AdminCategoryController extends Controller
              * エラーの中はエラーを出さないと確認できないから要注意。
              * ここ、動作の確認はできてるの？
              */
-            Log::warnning($e->getMessage());
-            Log::warnning($e->getTraceAsString());
-            Log::warnning(print_r($request->toArray(), true));
+            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
+            Log::warning(print_r($request->toArray(), true));
 
             return back();
         } catch (\Exception $e) {
@@ -134,9 +134,9 @@ class AdminCategoryController extends Controller
             return redirect('admin/category/edit/' . $id)->with('success', '更新完了！');
 
         } catch (ValidationException $e) {
-            Log::warnning($e->getMessage());
-            Log::warnning($e->getTraceAsString());
-            Log::warnning(print_r($request->toArray(), true));
+            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
+            Log::warning(print_r($request->toArray(), true));
 
             return back();
         } catch (\Exception $e) {

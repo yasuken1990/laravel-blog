@@ -33,9 +33,9 @@ class AdminUserController extends Controller
 
             return redirect('admin/user')->with('success', '更新完了！');
         } catch (ValidationException $e) {
-            Log::warnning($e->getMessage());
-            Log::warnning($e->getTraceAsString());
-            Log::warnning(print_r($request->toArray(), true));
+            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
+            Log::warning(print_r($request->toArray(), true));
 
             return back();
         } catch (\Exception $e) {
