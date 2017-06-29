@@ -29,6 +29,13 @@ class Post extends Model
         return $this->belongsTo('App\Category');
     }
 
+    /**
+     * TODO: fix
+     * スコープが・・
+     * public static function かな。
+     * でもgetStatusって言ったら、ひとつのインスタンスのstatusを返しそうだけどね。
+     * gitlabの他のプログラムをみて、よりよい方法に変えてください。
+     */
     static function getStatus()
     {
         return collect([

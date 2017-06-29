@@ -27,6 +27,10 @@ class AdminPostController extends Controller
     {
         // Post Index Page. Post List.
         $posts = Post::paginate(self::PAGINATION);
+        /**
+         * TODO: fix
+         * App\Post::getStatus()のコメントを参照し、修正してください。
+         */
         $status = Post::getStatus();
         return view('admin.posts.index', compact('posts', 'status'));
     }
@@ -95,6 +99,11 @@ class AdminPostController extends Controller
     public function edit($id)
     {
         // Show Post Ediit Page.
+        /**
+         * TODO: fix
+         * エラーが起きたらどうするの？
+         * 指摘された箇所だけではなく、同じ理由のある箇所は全部修正してください。
+         */
         $post = Post::findOrFail($id);
         $status = Post::getStatus();
         $category = Category::all()->pluck('name', 'id');
@@ -152,6 +161,10 @@ class AdminPostController extends Controller
     public function destroy($id)
     {
         // Do Post Delete.
+        /**
+         * TODO: fix
+         * これ動くの？
+         */
         POST::destroy($id);
 
         return redirect('admin/post');

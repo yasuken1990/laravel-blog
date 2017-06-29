@@ -17,6 +17,10 @@ class AdminSiteController extends Controller
 
     public function index()
     {
+        /**
+         * TODO: fix
+         * この「1」ってなんだろう。
+         */
         $site = Site::find(1);
         return view('admin.site', compact('site'));
     }
