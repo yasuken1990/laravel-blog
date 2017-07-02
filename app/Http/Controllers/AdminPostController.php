@@ -140,7 +140,7 @@ class AdminPostController extends Controller
             ]);
 
             // Do Post Edit.
-            $post = Post::find($id);
+            $post = Post::findOrFail($id);
             $post->title = $request->input('title');
             $post->link = $request->input('link');
             $post->content = $request->input('content');
@@ -150,6 +150,13 @@ class AdminPostController extends Controller
             $post->save();
 
             return back()->with('success', '更新完了！');
+
+        } catch (ModelNotFoundException $e) {
+
+            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
+
+            return back()->with('error', "ID:{$id}の、記事は存在しません。");
 
         } catch (ValidationException $e) {
             Log::warning($e->getMessage());
