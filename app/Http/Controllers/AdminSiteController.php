@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use App\Site;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AdminSiteController extends Controller
 {
@@ -17,38 +18,24 @@ class AdminSiteController extends Controller
 
     public function index()
     {
-        /**
-         * TODO: fix
-         * この「1」ってなんだろう。
-         */
-        $site = Site::find(1);
-        return view('admin.site', compact('site'));
-    }
+        try {
+            $site = Site::firstOrCreate(
+                [
+                    'id' => 1,
+                ],
+                [
+                    'title' => 'Site Title',
+                    'phrase' => 'Catch Phrase',
+                ]);
 
-    public function update(Request $request)
-    {
-        try{
-            $message = [
-                'title.required' => 'サイトタイトルは、必須入力です。',
-            ];
-            $this->validate($request, [
-                'title' => 'required',
-                'phrase' => 'required',
+            return view('admin.site', compact('site'));
 
-            ], $message);
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
 
-            Site::updateOrCreate([
-                'id' => 1
-            ], $request->except(['_token']));
-
-            return redirect('admin/site')->with('success', '更新完了！');
-
-        } catch (ValidationException $e) {
-            Log::warning($e->getMessage());
-            Log::warning($e->getTraceAsString());
-            Log::warning(print_r($request->toArray(), true));
-
-            return back();
+            return back()->with('error', 'サイト情報が存在しません。深刻なエラーです！今すぐ管理者に連絡してください！');
+            
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
@@ -58,29 +45,25 @@ class AdminSiteController extends Controller
         }
     }
 
-    /**
-     * Sample update method.
-     *
-     * @param Request $request
-     * @return $this|\Illuminate\Http\RedirectResponse
-     */
-    public function updateSample(Request $request)
+    public function update(Request $request)
     {
         try {
-
+            $message = [
+                'title.required' => 'サイトタイトルは、必須入力です。',
+            ];
             $this->validate($request, [
                 'title' => 'required',
                 'phrase' => 'required',
 
-            ]);
+            ], $message);
 
+            $site = Site::firstOrFail();
 
-            // Basicsはおかしいので、Siteに改名しました。
-            Site::updateOrCreate([
-                'id' => 1
-            ], $request->except(['_token']));
+            $site->title = $request->input('title');
+            $site->phrase = $request->input('phrase');
+            $site->save();
 
-            return redirect('admin')->with('success', 'Successfully updated.');
+            return redirect('admin/site')->with('success', '更新完了！');
 
         } catch (ValidationException $e) {
             Log::warning($e->getMessage());
@@ -88,6 +71,12 @@ class AdminSiteController extends Controller
             Log::warning(print_r($request->toArray(), true));
 
             return back();
+
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', 'サイト情報が存在しません。深刻なエラーです！今すぐ管理者に連絡してください！');
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());
