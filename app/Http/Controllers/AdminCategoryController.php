@@ -47,13 +47,13 @@ class AdminCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
 
-        try{
+        try {
             $this->validate($request, [
                 'name' => 'required|unique:categories|max:255',
             ]);
@@ -87,11 +87,10 @@ class AdminCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    // $id = 0 にしておくけれど、何かいい方法はないかな…　yasuken
-    public function edit($id = 0)
+    public function edit($id)
     {
         // Show Post Ediit Page.
 
@@ -99,24 +98,27 @@ class AdminCategoryController extends Controller
             $category = Category::findOrFail($id);
 
             return view('admin.categories.edit', compact('category'));
+
         } catch (ModelNotFoundException $e) {
             Log::warning($e->getMessage());
             Log::warning($e->getTraceAsString());
 
             return back()->with('error', "ID:{$id}の、カテゴリは存在しません。");
+
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
 
             return back()->with('error', '予期せぬエラーが発生しました。');
+
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -155,13 +157,22 @@ class AdminCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Category::destroy($id);
+        try {
+            Category::destroy($id);
 
-        return redirect('admin/category');
+            return redirect('admin/category');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', '削除できませんでした。');
+
+        }
     }
 }
