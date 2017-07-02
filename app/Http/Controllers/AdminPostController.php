@@ -8,10 +8,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+
 
 class AdminPostController extends Controller
 {
-    const PAGINATION = 2;
+    const PAGINATION_PER_PAGE = 10;
 
     public function __construct()
     {
@@ -26,13 +29,11 @@ class AdminPostController extends Controller
     public function index()
     {
         // Post Index Page. Post List.
-        $posts = Post::paginate(self::PAGINATION);
-        /**
-         * TODO: fix
-         * App\Post::getStatus()のコメントを参照し、修正してください。
-         */
-        $status = Post::getStatus();
+        $posts = Post::paginate(self::PAGINATION_PER_PAGE);
+        $status = Post::$statusLabels;
+
         return view('admin.posts.index', compact('posts', 'status'));
+
     }
 
     /**
@@ -44,9 +45,10 @@ class AdminPostController extends Controller
     {
         // Show Create Post Page.
         $category = Category::all()->pluck('name', 'id');
-        $status = Post::getStatus();
+        $status = Post::$statusLabels;
 
         return view('admin.posts.create', compact('category', 'status'));
+
     }
 
     /**
@@ -65,15 +67,15 @@ class AdminPostController extends Controller
             ]);
 
             $post = new Post();
-            $post->title = $request->title;
+            $post->title = $request->input('title');
             $post->link = $request->link;
-            $post->category_id = $request->category_id;
-            $post->status = $request->status;
+            $post->category_id = $request->input('category_id');
+            $post->status = $request-input('status');
             $post->tag_id = 1; // dummy
-            $post->content = $request->content;
+            $post->content = $request->input('content');
             $post->save();
 
-            return redirect('admin/post')->with('success', '更新完了！');
+            return redirect('admin/post')->with('success', '作成完了！');
 
         } catch (ValidationException $e) {
             Log::warning($e->getMessage());
@@ -99,15 +101,26 @@ class AdminPostController extends Controller
     public function edit($id)
     {
         // Show Post Ediit Page.
-        /**
-         * TODO: fix
-         * エラーが起きたらどうするの？
-         * 指摘された箇所だけではなく、同じ理由のある箇所は全部修正してください。
-         */
-        $post = Post::findOrFail($id);
-        $status = Post::getStatus();
-        $category = Category::all()->pluck('name', 'id');
-        return view('admin.posts.edit', compact('post', 'category', 'status'));
+        try {
+            $post = Post::findOrFail($id);
+            $status = Post::$statusLabels;
+            $category = Category::all()->pluck('name', 'id');
+
+            return view('admin.posts.edit', compact('post', 'category', 'status'));
+
+        } catch (ModelNotFoundException $e) {
+            Log::warning($e->getMessage());
+            Log::warning($e->getTraceAsString());
+
+            return back()->with('error', "ID:{$id}の、記事は存在しません。");
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+
+        }
     }
 
     /**
@@ -121,22 +134,23 @@ class AdminPostController extends Controller
     {
         try {
             $this->validate($request, [
-                'title' => 'required|unique:posts|max:255',
-                'link' => 'required|unique:posts',
+                'title' => 'required|unique:posts,title|max:255',
+                'link' => 'required|unique:posts,link',
                 'content' => 'required',
             ]);
 
             // Do Post Edit.
             $post = Post::find($id);
-            $post->title = $request->title;
-            $post->link = $request->link;
-            $post->content = $request->content;
-            $post->status = $request->status;
+            $post->title = $request->input('title');
+            $post->link = $request->input('link');
+            $post->content = $request->input('content');
+            $post->status = $request->input('status');
             $post->tag_id = 1; // dummy
-            $post->category_id = $request->category_id;
+            $post->category_id = $request->input('category_id');
             $post->save();
 
             return back()->with('success', '更新完了！');
+
         } catch (ValidationException $e) {
             Log::warning($e->getMessage());
             Log::warning($e->getTraceAsString());
@@ -160,13 +174,18 @@ class AdminPostController extends Controller
      */
     public function destroy($id)
     {
-        // Do Post Delete.
-        /**
-         * TODO: fix
-         * これ動くの？
-         */
-        POST::destroy($id);
+        try {
+            // Do Post Delete.
+            Post::destroy($id);
 
-        return redirect('admin/post');
+            return redirect('admin/post');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', '削除できませんでした。');
+
+        }
     }
 }
