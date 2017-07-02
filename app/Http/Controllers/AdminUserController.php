@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 class AdminUserController extends Controller
 {
@@ -15,8 +17,24 @@ class AdminUserController extends Controller
 
     public function index()
     {
-        $user = User::find(1);
-        return view('admin.user', compact('user'));
+        try {
+            $user = User::firstOrFail();
+
+            return view('admin.user', compact('user'));
+
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', '管理ユーザが存在しません。深刻なエラーです！今すぐ管理者に連絡してください！');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+
+        }
     }
 
     public function update(Request $request)
@@ -27,22 +45,31 @@ class AdminUserController extends Controller
                 'email' => 'required',
             ]);
 
-            User::updateOrCreate([
-                'id' => 1
-            ], $request->except(['_token']));
+            $user = User::firstOrFail();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->save();
 
             return redirect('admin/user')->with('success', '更新完了！');
+
         } catch (ValidationException $e) {
             Log::warning($e->getMessage());
             Log::warning($e->getTraceAsString());
-            Log::warning(print_r($request->toArray(), true));
 
             return back();
+
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', 'ユーザが存在しません。深刻なエラーです！今すぐ管理者に連絡してください！');
+
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
 
             return back()->with('error', 'System error has occured. Please contact the system administrator.');
+
         }
     }
 }
