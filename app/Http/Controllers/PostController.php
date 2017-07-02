@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -47,8 +49,26 @@ class PostController extends Controller
     public function show($link)
     {
         //
-        $post = Post::where('link', $link)->first();
-        return view('posts.detail', compact('post', $post));
+        try {
+            $post = Post::where('link', $link)->firstOrFail();
+
+            return view('posts.detail', compact('post', $post));
+
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return abort(404);
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            // TODO フロントだし、500がいいかな…
+            // https://readouble.com/laravel/5.4/ja/errors.html
+            return back()->with('error', 'System error has occured. Please contact the system administrator.');
+
+        }
     }
 
     /**
