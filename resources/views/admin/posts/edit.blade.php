@@ -14,6 +14,16 @@
                     <h3 class="box-title">記事ID: {{ $post->id }}</h3>
                 </div>
                 <div class="box-body">
+                    @if (session('success'))
+                        <div class="alert alert-success" onclick="this.classList.add('hidden')">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger" onclick="this.classList.add('hidden')">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <div class="form-group">
                         <label for="category_id">
                             カテゴリ
