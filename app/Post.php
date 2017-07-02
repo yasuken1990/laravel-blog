@@ -13,6 +13,11 @@ class Post extends Model
 
     protected $fillable = ['title', 'link', 'content', 'status', 'tag_id', 'category_id', 'content'];
 
+    public static $statusLabels = [
+        self::STATUS_PRIVATE => '非公開',
+        self::STATUS_PUBLIC => '公開',
+    ];
+
     //
     public function comments()
     {
@@ -29,18 +34,8 @@ class Post extends Model
         return $this->belongsTo('App\Category');
     }
 
-    /**
-     * TODO: fix
-     * スコープが・・
-     * public static function かな。
-     * でもgetStatusって言ったら、ひとつのインスタンスのstatusを返しそうだけどね。
-     * gitlabの他のプログラムをみて、よりよい方法に変えてください。
-     */
-    static function getStatus()
+    public function getStatusLabel()
     {
-        return collect([
-            self::STATUS_PRIVATE => '非公開',
-            self::STATUS_PUBLIC => '公開'
-        ]);
+        return self::$statusLabels[$this->status];
     }
 }
