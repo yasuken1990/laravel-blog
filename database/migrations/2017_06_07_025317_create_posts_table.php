@@ -18,11 +18,13 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->string('link');
             $table->text('content');
-            $table->integer('status_id')->unsigned();
+            $table->integer('status')->unsigned();
             $table->integer('category_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('categories');
-
+            $table->integer('user_id')->unsigned()->nullable();
             $table->integer('tag_id');
+
+            $table->foreign('user_id')->references('id')->on('users');
+
             $table->timestamps();
         });
     }

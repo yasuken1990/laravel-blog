@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSitesTable extends Migration
+class CreateCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,17 @@ class CreateSitesTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('sites', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('phrase');
+            $table->integer('post_id')->unsigned();
+            $table->string('name');
+            $table->string('body');
             $table->timestamps();
+
+            $table->foreign('post_id')
+                ->references('id')
+                ->on('posts')
+                ->onDelete('cascade');
         });
     }
 
@@ -29,7 +34,6 @@ class CreateSitesTable extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('sites');
+        Schema::drop('comments');
     }
 }
