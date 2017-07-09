@@ -99,13 +99,9 @@
                     none
                 @endforelse
                 <!-- Pager -->
-                    <!--
                 <ul class="pager">
-                    <li class="next">
-                        <a href="#">Older Posts &rarr;</a>
-                    </li>
+                        {{ $posts->appends(['sort' => 'votes'])->links() }}
                 </ul>
-                -->
             </div>
         </div>
     </div>

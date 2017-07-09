@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Log;
 
 class FrontController extends Controller
 {
+    const PAGINATION_PER_PAGE = 5;
+
     //
     public function index()
     {
         try {
             $site = Site::firstOrFail();
-            $posts = Post::all();
+            $posts = Post::where('status', Post::STATUS_PUBLIC)->paginate(self::PAGINATION_PER_PAGE);
 
             return view('index', compact('site', 'posts'));
 

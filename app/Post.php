@@ -8,8 +8,8 @@ class Post extends Model
 {
 
     const PAGINATION = 10;
-    const STATUS_PRIVATE = 0;
-    const STATUS_PUBLIC = 1;
+    const STATUS_PRIVATE = 100;
+    const STATUS_PUBLIC = 200;
 
     protected $fillable = ['title', 'link', 'content', 'status', 'tag_id', 'category_id', 'content'];
 
