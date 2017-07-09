@@ -41,6 +41,9 @@ Route::put('/admin/post/edit/{id?}', 'AdminPostController@update')->name('admin.
 Route::delete('/admin/post/delete/{id?}', 'AdminPostController@destroy')->name('admin.post.delete');
 
 // Comment
+Route::get('admin/comment', 'AdminCommentController@index')->name('admin.comment.index');
+Route::delete('admin/comment/{id}', 'AdminCommentController@destroy')->name('admin.comment.index');
+
 Route::post('/{id}/comment', 'CommentController@store')->name('post.comment.store');
 
 Route::get('/{link}', 'PostController@show')->name('post.detail');

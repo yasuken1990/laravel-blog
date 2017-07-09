@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
-use App\Comment;
 use Illuminate\Http\Request;
+use App\Comment;
 
-class CommentController extends Controller
+class AdminCommentController extends Controller
 {
+
+    const PAGINATION_PER_PAGE = 10;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +22,9 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $comments = Comment::paginate(self::PAGINATION_PER_PAGE);
+
+        return view('admin.comments.index', compact('comments'));
     }
 
     /**
@@ -34,20 +43,9 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $postId)
+    public function store(Request $request)
     {
-        $post = Post::find($postId);
-        $this->validate($request, [
-            'body' => 'required|max:255',
-            'name' => 'required|max:255'
-        ]);
-
-        $comment = new Comment(['body' => $request->body]);
-        $comment->name = $request->input('name');
-        $post->comments()->save($comment);
-
-        return redirect()
-            ->action('PostController@show', $post->link);
+        //
     }
 
     /**
@@ -92,6 +90,18 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            // Do Post Delete.
+            Comment::destroy($id);
+
+            return redirect('admin/comment');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', '削除できませんでした。');
+
+        }
     }
 }
