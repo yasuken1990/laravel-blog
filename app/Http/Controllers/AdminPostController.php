@@ -160,14 +160,12 @@ class AdminPostController extends Controller
             return back()->with('error', "ID:{$id}の、記事は存在しません。");
 
         } catch (ValidationException $e) {
-            dd($e);
             Log::warning($e->getMessage());
             Log::warning($e->getTraceAsString());
             Log::warning(print_r($request->toArray(), true));
 
             return back();
         } catch (\Exception $e) {
-            dd($e);
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
 
