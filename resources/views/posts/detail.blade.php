@@ -76,7 +76,15 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
                         <h1>{!! $post->title !!}</h1>
-                        <h2 class="subheading">{!! $post->category->name !!}</h2>
+                        <h2 class="subheading">カテゴリ：{!! $post->category->name !!}</h2>
+                        <h3 class="subheading">タグ：
+                            @forelse($tags as $tag)
+                                @if(in_array($tag->id, $selectedTags))
+                                    {{ $tag->name . ' ' }}
+                                @endif
+                            @empty
+                            @endforelse
+                        </h3>
                         <span class="meta">Posted by <a href="#"></a>{{ $post->created_at }}</span>
                     </div>
                 </div>

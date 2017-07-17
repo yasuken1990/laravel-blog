@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Site;
+use App\Tag;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 
@@ -53,7 +54,10 @@ class PostController extends Controller
         try {
             $post = Post::where('link', $link)->where('status', Post::STATUS_PUBLIC)->firstOrFail();
             $site = Site::firstOrFail();
-            return view('posts.detail', compact('post', 'site'));
+            $selectedTags = $post->tags()->pluck('id')->toArray();
+            $tags = Tag::all();
+
+            return view('posts.detail', compact('post', 'site', 'tags', 'selectedTags'));
 
         } catch (ModelNotFoundException $e) {
             Log::error($e->getMessage());
