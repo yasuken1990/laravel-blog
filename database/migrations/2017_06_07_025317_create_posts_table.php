@@ -21,7 +21,6 @@ class CreatePostsTable extends Migration
             $table->integer('status')->unsigned();
             $table->integer('category_id')->unsigned()->nullable();
             $table->integer('user_id')->unsigned()->nullable();
-            $table->integer('tag_id');
 
             $table->foreign('user_id')->references('id')->on('users');
 

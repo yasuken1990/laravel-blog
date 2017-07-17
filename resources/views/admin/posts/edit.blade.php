@@ -25,8 +25,8 @@
                         </div>
                     @endif
                     <div class="form-group">
+                        カテゴリ
                         <label for="category_id">
-                            カテゴリ
                         </label>
                         @if ($post->category)
                             {{Form::select('category_id', $category, $post->category->id)}}
@@ -35,8 +35,22 @@
                         @endif
                     </div>
                     <div class="form-group">
+                        タグ
+                        @forelse($tags as $tag)
+                            <label for="{{ 'tags_' . $tag->id }}">
+                                {{ $tag->name }}
+                            </label>
+                            @if(in_array($tag->id, $selectedTags))
+                                {{ Form::checkbox('tags[]', $tag->id, true, ['id' => 'tags_' . $tag->id]) }}
+                            @else
+                                {{ Form::checkbox('tags[]', $tag->id, null, ['id' => 'tags_' . $tag->id]) }}
+                            @endif
+                        @empty
+                        @endforelse
+                    </div>
+                    <div class="form-group">
+                        公開ステータス
                         <label for="status">
-                            公開ステータス
                         </label>
                         @if ($post->status)
                             {{Form::select('status', $status, $post->status)}}
@@ -45,12 +59,14 @@
                         @endif
                     </div>
                     <div class="form-group">
-                        <label for="sitetitle">記事タイトル</label>
-                        <input type="text" name="title" class="form-control" id="title" placeholder="記事タイトル" value="{{ old('title', $post->title) }}">
+                        <label for="title">記事タイトル</label>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="記事タイトル"
+                               value="{{ old('title', $post->title) }}">
                     </div>
                     <div class="form-group">
                         <label for="link">記事リンク</label>
-                        <input type="text" name="link" class="form-control" id="link" placeholder="http://domain/[link]" value="{{ old('link', $post->link) }}">
+                        <input type="text" name="link" class="form-control" id="link" placeholder="http://domain/[link]"
+                               value="{{ old('link', $post->link) }}">
                     </div>
                     <div class="form-group">
                         <label for="content">記事本文</label>
@@ -62,7 +78,11 @@
                 </div>
                 <div class="box-footer">
                     <button type="submit" class="btn btn-primary">更新</button>
-                    <td><button type="button" class="btn btn-info" value="top" onClick="location.href='{{ url('/' . $post->link) }}'">確認</button></td>
+                    <td>
+                        <button type="button" class="btn btn-info" value="top"
+                                onClick="location.href='{{ url('/' . $post->link) }}'">確認
+                        </button>
+                    </td>
                 </div>
                 {{Form::close()}}
             </div>

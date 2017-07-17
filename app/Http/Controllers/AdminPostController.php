@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Category;
+use App\Tag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -46,9 +47,10 @@ class AdminPostController extends Controller
     {
         // Show Create Post Page.
         $category = Category::all()->pluck('name', 'id');
+        $tags = Tag::all();
         $status = Post::$statusLabels;
 
-        return view('admin.posts.create', compact('category', 'status'));
+        return view('admin.posts.create', compact('category', 'status', 'tags'));
 
     }
 
@@ -72,9 +74,10 @@ class AdminPostController extends Controller
             $post->link = $request->link;
             $post->category_id = $request->input('category_id');
             $post->status = $request->input('status');
-            $post->tag_id = 1; // dummy
             $post->content = $request->input('content');
             $post->save();
+
+            $post->tags()->sync($request->input('tags'));
 
             return redirect('admin/post')->with('success', '作成完了！');
 
@@ -106,8 +109,10 @@ class AdminPostController extends Controller
             $post = Post::findOrFail($id);
             $status = Post::$statusLabels;
             $category = Category::all()->pluck('name', 'id');
+            $selectedTags = $post->tags()->pluck('id')->toArray();
+            $tags = Tag::all();
 
-            return view('admin.posts.edit', compact('post', 'category', 'status'));
+            return view('admin.posts.edit', compact('post', 'category', 'status', 'tags', 'selectedTags'));
 
         } catch (ModelNotFoundException $e) {
             Log::warning($e->getMessage());
@@ -146,9 +151,10 @@ class AdminPostController extends Controller
             $post->link = $request->input('link');
             $post->content = $request->input('content');
             $post->status = $request->input('status');
-            $post->tag_id = 1; // dummy
             $post->category_id = $request->input('category_id');
             $post->save();
+
+            $post->tags()->sync($request->input('tags'));
 
             return back()->with('success', '更新完了！');
 

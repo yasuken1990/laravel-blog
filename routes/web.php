@@ -40,6 +40,16 @@ Route::get('/admin/post/edit/{id?}', 'AdminPostController@edit')->name('admin.po
 Route::put('/admin/post/edit/{id?}', 'AdminPostController@update')->name('admin.post.update');
 Route::delete('/admin/post/delete/{id?}', 'AdminPostController@destroy')->name('admin.post.delete');
 
+// Tag
+Route::get('/admin/tag', 'AdminTagController@index')->name('admin.tag.index');
+Route::get('/admin/tag/create', 'AdminTagController@create')->name('admin.tag.create');
+Route::post('/admin/tag', 'AdminTagController@store')->name('admin.tag.store');
+Route::get('/admin/tag/edit/{id?}', 'AdminTagController@edit')->name('admin.tag.edit');
+Route::put('/admin/tag/edit/{id?}', 'AdminTagController@update')->name('admin.tag.update');
+Route::delete('/admin/tag/delete/{id?}', 'AdminTagController@destroy')->name('admin.tag.delete');
+
+
+
 // Comment
 Route::get('admin/comment', 'AdminCommentController@index')->name('admin.comment.index');
 Route::delete('admin/comment/{id}', 'AdminCommentController@destroy')->name('admin.comment.index');

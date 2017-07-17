@@ -11,7 +11,7 @@ class Post extends Model
     const STATUS_PRIVATE = 100;
     const STATUS_PUBLIC = 200;
 
-    protected $fillable = ['title', 'link', 'content', 'status', 'tag_id', 'category_id', 'content'];
+    protected $fillable = ['title', 'link', 'content', 'status', 'category_id', 'content'];
 
     public static $statusLabels = [
         self::STATUS_PRIVATE => '非公開',
@@ -26,7 +26,7 @@ class Post extends Model
 
     public function tags()
     {
-        return $this->morphToMany('App\Tag', 'taggable');
+        return $this->belongsToMany('App\Tag');
     }
 
     public function category()

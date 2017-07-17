@@ -20,28 +20,40 @@
                         </div>
                     @endif
                     <div class="form-group">
+                        公開ステータス
                         <label for="status">
-                            公開ステータス
                         </label>
                         {{Form::select('status', $status, 0)}}
                     </div>
                     <div class="form-group">
+                        カテゴリ
                         <label for="category_id">
-                            カテゴリ
                         </label>
                         {{Form::select('category_id', $category, '1')}}
                     </div>
                     <div class="form-group">
-                        <label for="sitetitle">記事タイトル</label>
-                        <input type="text" name="title" class="form-control" id="title" placeholder="記事タイトル" value="{{ old('title') }}">
+                        タグ
+                        @forelse($tags as $tag)
+                            <label for="{{ 'tags_' . $tag->id }}">
+                                {{ $tag->name }}
+                            </label>
+                            {{ Form::checkbox('tags[]', $tag->id, null, ['id' => 'tags_' . $tag->id]) }}
+                        @empty
+                        @endforelse
+                    </div>
+                    <div class="form-group">
+                        <label for="title">記事タイトル</label>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="記事タイトル"
+                               value="{{ old('title') }}">
                     </div>
                     <div class="form-group">
                         <label for="link">記事リンク</label>
-                        <input type="text" name="link" class="form-control" id="link" placeholder="http://domain/[link]" value="{{ old('link') }}">
+                        <input type="text" name="link" class="form-control" id="link" placeholder="http://domain/[link]"
+                               value="{{ old('link') }}">
                     </div>
                     <div class="form-group">
                         <label for="content">記事本文</label>
-                            <textarea id="mytextarea" name="content" value="{{ old('content') }}"></textarea>
+                        <textarea id="mytextarea" name="content" value="{{ old('content') }}"></textarea>
                     </div>
                     <div class="form-group">
 
