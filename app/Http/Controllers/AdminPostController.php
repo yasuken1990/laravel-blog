@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 
 
 class AdminPostController extends Controller
@@ -62,6 +66,31 @@ class AdminPostController extends Controller
      */
     public function store(Request $request)
     {
+
+        $input = Input::all();
+
+
+        // getClientOriginalName()：アップロードしたファイルのオリジナル名を取得します
+        $fileName = $input['fileName']->getClientOriginalName();
+
+        // getRealPath()：アップロードしたファイルのパスを取得します。
+        $image = Image::make($input['fileName']->getRealPath());
+        $image->save(public_path() . '/images/' . Auth::user()->name . '/' . $fileName);
+
+        dd($fileName, $image);
+
+
+        Storage::disk('local')->put($request->input('fileName'), Storage::disk('local')->get($request->input('fileName')));
+
+        dd($request->input('fileName'));
+        if ($request->file($request->input('fileName'))->isValid()) {
+            dd('up');
+            //
+        } else {
+            dd('nop');
+        }
+
+
         try {
             $this->validate($request, [
                 'title' => 'required|unique:posts|max:255',
