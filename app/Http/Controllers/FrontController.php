@@ -7,6 +7,7 @@ use App\Site;
 use App\Post;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class FrontController extends Controller
 {
@@ -17,7 +18,16 @@ class FrontController extends Controller
     {
         try {
             $site = Site::firstOrFail();
-            $posts = Post::where('status', Post::STATUS_PUBLIC)->paginate(self::PAGINATION_PER_PAGE);
+
+            if (Auth::check()) {
+
+                $posts = Post::paginate(self::PAGINATION_PER_PAGE);
+
+            } else {
+
+                $posts = Post::where('status', Post::STATUS_PUBLIC)->paginate(self::PAGINATION_PER_PAGE);
+
+            }
 
             return view('index', compact('site', 'posts'));
 

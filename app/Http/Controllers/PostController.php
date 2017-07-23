@@ -7,6 +7,7 @@ use App\Post;
 use App\Site;
 use App\Tag;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
@@ -52,7 +53,16 @@ class PostController extends Controller
     {
         //
         try {
-            $post = Post::where('link', $link)->where('status', Post::STATUS_PUBLIC)->firstOrFail();
+            if (Auth::check()) {
+
+                $post = Post::where('link', $link)->firstOrFail();
+
+            } else {
+
+                $post = Post::where('link', $link)->where('status', Post::STATUS_PUBLIC)->firstOrFail();
+
+            }
+
             $site = Site::firstOrFail();
             $selectedTags = $post->tags()->pluck('id')->toArray();
             $tags = Tag::all();
