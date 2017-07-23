@@ -48,6 +48,10 @@ Route::get('/admin/tag/edit/{id?}', 'AdminTagController@edit')->name('admin.tag.
 Route::put('/admin/tag/edit/{id?}', 'AdminTagController@update')->name('admin.tag.update');
 Route::delete('/admin/tag/delete/{id?}', 'AdminTagController@destroy')->name('admin.tag.delete');
 
+// Image
+Route::post('/admin/image', 'AdminImageController@store')->name('admin.image.store');
+
+
 
 
 // Comment

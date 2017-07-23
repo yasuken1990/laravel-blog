@@ -70,7 +70,12 @@
                     </div>
                     <div class="form-group">
                         <label for="content">記事本文</label>
-                        <textarea id="mytextarea" name="content">{{ old('content', $post->content) }}</textarea>
+                        @if (session('uploadImagePath'))
+                            <textarea id="mytextarea" name="content">{{ old('content', $post->content . session('uploadImagePath')) }}</textarea>
+                        @else
+                            <textarea id="mytextarea" name="content">{{ old('content', $post->content) }}</textarea>
+
+                        @endif
                     </div>
                     <div class="form-group">
 
@@ -83,8 +88,15 @@
                                 onClick="location.href='{{ url('/' . $post->link) }}'">確認
                         </button>
                     </td>
+                    {{Form::close()}}
+                    <hr>
+                    {{Form::open(['method' => 'post', 'action' => ['AdminImageController@store'], 'files' => true])}}
+                    {{Form::token()}}
+                    {!! Form::label('fileName', 'アップロード') !!}
+                    {!! Form::file('fileName') !!}
+                    {!! Form::submit('アップロードする') !!}
+                    {{Form::close()}}
                 </div>
-                {{Form::close()}}
             </div>
         </div>
     </div>

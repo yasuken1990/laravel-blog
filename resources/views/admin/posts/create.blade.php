@@ -10,6 +10,16 @@
                 {{Form::token()}}
 
                 <div class="box-body">
+                    @if (session('success'))
+                        <div class="alert alert-success" onclick="this.classList.add('hidden')">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger" onclick="this.classList.add('hidden')">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <ul>
@@ -55,19 +65,21 @@
                         <label for="content">記事本文</label>
                         <textarea id="mytextarea" name="content" value="{{ old('content') }}"></textarea>
                     </div>
-                    <div class="form-group">
-
-                    </div>
                 </div>
 
-                {!! Form::label('fileName', 'アップロード') !!}
-                {!! Form::file('fileName') !!}
-                {!! Form::submit('アップロードする') !!}
 
                 <div class="box-footer">
                     <button type="submit" class="btn btn-primary">作成</button>
+                    {{Form::close()}}
+                    <hr>
+                    {{Form::open(['method' => 'post', 'action' => ['AdminImageController@store'], 'files' => true])}}
+                    {{Form::token()}}
+                    {!! Form::label('fileName', 'アップロード') !!}
+                    {!! Form::file('fileName') !!}
+                    {!! Form::submit('アップロードする') !!}
+                    {{Form::close()}}
                 </div>
-                {{Form::close()}}
+
             </div>
         </div>
     </div>
