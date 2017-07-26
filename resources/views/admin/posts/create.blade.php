@@ -63,7 +63,13 @@
                     </div>
                     <div class="form-group">
                         <label for="content">記事本文</label>
-                        <textarea id="mytextarea" name="content" value="{{ old('content') }}"></textarea>
+                        @if (session('imgId'))
+                            <textarea id="mytextarea"
+                                      name="content">{{ old('content') . '<img src="/images/' . \App\Image::find(session('imgId'))->name . '">'}}</textarea>
+                        @else
+                            <textarea id="mytextarea" name="content">{{ old('content') }}</textarea>
+                        @endif
+
                     </div>
                 </div>
 

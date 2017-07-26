@@ -39,6 +39,7 @@ class AdminImageController extends Controller
     public function store(Request $request)
     {
         try {
+
             $input = Input::all();
             $file = $request->file('fileName');
 
@@ -52,11 +53,11 @@ class AdminImageController extends Controller
 
             $image = Image::make($input['fileName']);
             $image->save(public_path() . '/images/' . $fileName);
-            $imagePath = '/images/' . $fileName;
 
             if ($request->file('fileName')->isValid()) {
 
-                return back()->with('success', '画像をアップロードしました！')->with('uploadImagePath', "<img src='{$imagePath}'>");
+                $imageClient = \App\Image::firstOrCreate(['name' => $fileName]);
+                return back()->with('success', '画像をアップロードしました！')->with('imgId', $imageClient->id);
 
             } else {
 

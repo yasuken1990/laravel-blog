@@ -29,6 +29,11 @@ class Post extends Model
         return $this->belongsToMany('App\Tag');
     }
 
+    public function images()
+    {
+        return $this->belongsToMany('App\Image');
+    }
+
     public function category()
     {
         return $this->belongsTo('App\Category');
