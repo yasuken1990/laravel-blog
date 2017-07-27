@@ -23,7 +23,8 @@ class AdminImageController extends Controller
         //
         $images = \App\Image::paginate(self::PAGINATION_PER_PAGE);
 
-        return view('admin.images.index', compact('images'));    }
+        return view('admin.images.index', compact('images'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -127,6 +128,17 @@ class AdminImageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            \App\Image::destroy($id);
+
+            return redirect('admin/image');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', '削除できませんでした。');
+
+        }
     }
 }
