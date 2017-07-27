@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Log;
 
 class AdminImageController extends Controller
 {
+
+    const PAGINATION_PER_PAGE = 5;
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +21,9 @@ class AdminImageController extends Controller
     public function index()
     {
         //
-    }
+        $images = \App\Image::paginate(self::PAGINATION_PER_PAGE);
+
+        return view('admin.images.index', compact('images'));    }
 
     /**
      * Show the form for creating a new resource.
