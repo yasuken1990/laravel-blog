@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Faker\Provider\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
@@ -129,6 +130,17 @@ class AdminImageController extends Controller
     public function destroy($id)
     {
         try {
+            $image = \App\Image::find($id);
+
+            if (\File::exists(public_path() . '/images/' . $image->name)) {
+                \File::delete(public_path() . '/images/' . $image->name);
+            }
+
+            foreach ($image->posts as $post) {
+                $post->content = $this->destroyImages($post->content);
+                $post->save();
+            }
+
             \App\Image::destroy($id);
 
             return redirect('admin/image');
@@ -139,6 +151,19 @@ class AdminImageController extends Controller
 
             return back()->with('error', '削除できませんでした。');
 
+        }
+    }
+
+    public function destroyImages($content)
+    {
+        $pattern = "#<img src=\".+?/images/(.+?)\" />#";
+        if(preg_match_all($pattern, $content,$matches)) {
+            foreach ($matches[0] as $imageTag) {
+                $content = str_replace($imageTag,'', $content);
+            }
+            return $content;
+        } else {
+            return $content;
         }
     }
 }

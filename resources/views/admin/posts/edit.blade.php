@@ -70,11 +70,11 @@
                     </div>
                     <div class="form-group">
                         <label for="content">記事本文</label>
-                        @if (session('uploadImagePath'))
-                            <textarea id="mytextarea" name="content">{{ old('content', $post->content . session('uploadImagePath')) }}</textarea>
+                        @if (session('imgId'))
+                            <textarea id="mytextarea"
+                                      name="content">{{ $post->content . '<img src="/images/' . \App\Image::find(session('imgId'))->name . '"data-mce-src="/images/' . \App\Image::find(session('imgId'))->name .'">'}}</textarea>
                         @else
                             <textarea id="mytextarea" name="content">{{ old('content', $post->content) }}</textarea>
-
                         @endif
                     </div>
                     <div class="form-group">

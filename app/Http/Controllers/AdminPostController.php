@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Image;
 use App\Post;
 use App\Category;
 use App\Tag;
@@ -63,17 +64,25 @@ class AdminPostController extends Controller
         try {
             $this->validate($request, [
                 'title' => 'required|unique:posts|max:255',
-                    'link' => 'required|unique:posts|max:255',
-                    'content' => 'required',
-                ]);
+                'link' => 'required|unique:posts|max:255',
+                'content' => 'required',
+            ]);
 
             $post = new Post();
             $post->title = $request->input('title');
-            $post->link = $request->link;
-            $post->category_id = $request->input('category_id');
-            $post->status = $request->input('status');
+            $post->link = $request->input('link');
             $post->content = $request->input('content');
+            $post->status = $request->input('status');
+            $post->category_id = $request->input('category_id');
             $post->save();
+
+            $images = $this->checkImages($post->content);
+            if ($images) {
+                foreach ($images as $image) {
+                    $image = Image::where('name', $image)->first();
+                    $post->images()->sync([$image->id]);
+                }
+            }
 
             $post->tags()->sync($request->input('tags'));
 
@@ -154,6 +163,14 @@ class AdminPostController extends Controller
 
             $post->tags()->sync($request->input('tags'));
 
+            $images = $this->checkImages($post->content);
+            if ($images) {
+                foreach ($images as $image) {
+                    $image = Image::where('name', $image)->first();
+                    $post->images()->sync([$image->id]);
+                }
+            }
+
             return back()->with('success', '更新完了！');
 
         } catch (ModelNotFoundException $e) {
@@ -198,6 +215,16 @@ class AdminPostController extends Controller
 
             return back()->with('error', '削除できませんでした。');
 
+        }
+    }
+
+    public function checkImages($content)
+    {
+        $pattern = "#<img src=\".+?/images/(.+?)\" />#";
+        if (preg_match_all($pattern, $content, $matches)) {
+            return $matches[1];
+        } else {
+            return false;
         }
     }
 }

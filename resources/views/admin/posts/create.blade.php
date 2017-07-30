@@ -65,7 +65,7 @@
                         <label for="content">記事本文</label>
                         @if (session('imgId'))
                             <textarea id="mytextarea"
-                                      name="content">{{ old('content') . '<img src="/images/' . \App\Image::find(session('imgId'))->name . '">'}}</textarea>
+                                      name="content">{{ old('content') . '<img src="/images/' . \App\Image::find(session('imgId'))->name . '"data-mce-src="/images/' . \App\Image::find(session('imgId'))->name .'">'}}</textarea>
                         @else
                             <textarea id="mytextarea" name="content">{{ old('content') }}</textarea>
                         @endif
