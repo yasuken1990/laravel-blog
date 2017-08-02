@@ -55,12 +55,11 @@ Route::put('/admin/image/edit/{id?}', 'AdminImageController@update')->name('admi
 Route::delete('/admin/image/{id?}', 'AdminImageController@destroy')->name('admin.image.delete');
 
 
-
-
 // Comment
 Route::get('admin/comment', 'AdminCommentController@index')->name('admin.comment.index');
 Route::delete('admin/comment/{id}', 'AdminCommentController@destroy')->name('admin.comment.index');
-
 Route::post('/{id}/comment', 'CommentController@store')->name('post.comment.store');
-
 Route::get('/{link}', 'PostController@show')->name('post.detail');
+
+// Template
+Route::resource('/admin/template', 'AdminTemplateController');
