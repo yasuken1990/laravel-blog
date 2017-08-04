@@ -1,7 +1,7 @@
 @extends('layouts.admin_main')
-@section('h1', 'カテゴリ管理')
-@section('title', 'カテゴリ管理 | 一覧')
-@section('description', 'カテゴリ一覧')
+@section('h1', '画像管理')
+@section('title', '画像管理 | 一覧')
+@section('description', '画像一覧')
 @section('content')
     <div class="row">
         <!-- left column -->
@@ -12,18 +12,18 @@
                         <tbody>
                         <tr>
                             <th>ID</th>
-                            <th>カテゴリ名</th>
+                            <th>画像</th>
+                            <th>画像名</th>
                             <th>日付</th>
-                            <th>編集</th>
                             <th>削除</th>
                         </tr>
-                        @forelse($categories as $category)
-                            <td>{{ $category->id }}</td>
-                            <td>{{ $category->name }}</td>
-                            <td>{{ $category->created_at }}</td>
-                            <td><button type="button" class="btn btn-primary" value="top" onClick="location.href='{{ url('admin/category/edit/' . $category->id) }}'">編集</button></td>
+                        @forelse($images as $image)
+                            <td><img src="/images/{{ $image->name }}" style="width:100px;"></td>
+                            <td>{{ $image->id }}</td>
+                            <td>{{ $image->name }}</td>
+                            <td>{{ $image->created_at }}</td>
                             <td>
-                                <form action="{{ action('AdminCategoryController@destroy', $category->id) }}" id="form_{{ $category->id }}" method="post">
+                                <form action="{{ action('AdminImageController@destroy', $image->id) }}" id="form_{{ $image->id }}" method="post">
                                     {{ method_field('delete') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-danger">削除</button>
@@ -36,11 +36,9 @@
                     </table>
                     <div class="text-center">
                         <div>
-                            {{ $categories->appends(['sort' => 'votes'])->links() }}
+                            {{ $images->appends(['sort' => 'votes'])->links() }}
                         </div>
                     </div>
-                    <button type="button" class="btn btn-success btn-lg btn-block" value="top" onClick="location.href='{{ url('admin/category/create') }}'">カテゴリ作成</button>
-
                 </div>
             </div>
 

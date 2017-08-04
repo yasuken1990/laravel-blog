@@ -1,5 +1,5 @@
 @extends('layouts.common')
-@section('title', $basics->sitetitle)
+@section('title', $site->title)
 @section('head')
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{ $basics->sitetitle }}</title>
+    <title>{{ $site->title }}</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="startbootstrap-clean-blog-gh-pages/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -69,9 +69,9 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="site-heading">
-                        <h1>{{ $basics->sitetitle }}</h1>
+                        <h1>{{ $site->title }}</h1>
                         <hr class="small">
-                        <span class="subheading">{{ $basics->catchphrase }}</span>
+                        <span class="subheading">{{ $site->phrase }}</span>
                     </div>
                 </div>
             </div>
@@ -99,13 +99,9 @@
                     none
                 @endforelse
                 <!-- Pager -->
-                    <!--
                 <ul class="pager">
-                    <li class="next">
-                        <a href="#">Older Posts &rarr;</a>
-                    </li>
+                        {{ $posts->appends(['sort' => 'votes'])->links() }}
                 </ul>
-                -->
             </div>
         </div>
     </div>

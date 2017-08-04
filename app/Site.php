@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Basics extends Model
+class Site extends Model
 {
     //
+    protected $fillable = ['title', 'phrase'];
 }

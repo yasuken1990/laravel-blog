@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Post;
-use App\Site;
-use App\Tag;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Comment;
+use Illuminate\Http\Request;
 
-class PostController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,9 +34,20 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $postId)
     {
-        //
+        $post = Post::find($postId);
+        $this->validate($request, [
+            'body' => 'required|max:255',
+            'name' => 'required|max:255'
+        ]);
+
+        $comment = new Comment(['body' => $request->body]);
+        $comment->name = $request->input('name');
+        $post->comments()->save($comment);
+
+        return redirect()
+            ->action('PostController@show', $post->link);
     }
 
     /**
@@ -49,41 +56,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($link)
+    public function show($id)
     {
         //
-        try {
-            if (Auth::check()) {
-
-                $post = Post::where('link', $link)->firstOrFail();
-
-            } else {
-
-                $post = Post::where('link', $link)->where('status', Post::STATUS_PUBLIC)->firstOrFail();
-
-            }
-
-            $site = Site::firstOrFail();
-            $selectedTags = $post->tags()->pluck('id')->toArray();
-            $tags = Tag::all();
-
-            return view('posts.detail', compact('post', 'site', 'tags', 'selectedTags'));
-
-        } catch (ModelNotFoundException $e) {
-            Log::error($e->getMessage());
-            Log::error($e->getTraceAsString());
-
-            return abort(404);
-
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            Log::error($e->getTraceAsString());
-
-            // TODO フロントだし、500がいいかな…
-            // https://readouble.com/laravel/5.4/ja/errors.html
-            return back()->with('error', 'System error has occured. Please contact the system administrator.');
-
-        }
     }
 
     /**

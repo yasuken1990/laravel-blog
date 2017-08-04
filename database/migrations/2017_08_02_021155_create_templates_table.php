@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBasicsTable extends Migration
+class CreateTemplatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateBasicsTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('basics', function (Blueprint $table) {
+        Schema::create('templates', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('sitetitle');
-            $table->string('catchphrase');
+            $table->string('name')->unique();
+            $table->text('top');
+            $table->text('detail');
+            $table->text('js');
+            $table->text('css');
             $table->timestamps();
         });
     }
@@ -29,7 +31,6 @@ class CreateBasicsTable extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('basics');
+        Schema::dropIfExists('templates');
     }
 }

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BasicsTableSeeder extends Seeder
+class SitesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,10 +12,10 @@ class BasicsTableSeeder extends Seeder
     public function run()
     {
         //
-        DB::table('Basics')->insert([
+        DB::table('sites')->insert([
             'id' => 1,
-            'sitetitle' => 'サイトタイトル',
-            'catchphrase' => 'キャッチフレーズ'
+            'title' => 'サイトタイトル',
+            'phrase' => 'キャッチフレーズ'
         ]);
     }
 }

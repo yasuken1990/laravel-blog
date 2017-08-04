@@ -14,28 +14,52 @@ Route::get('/', 'FrontController@index')->name('index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin', 'AdminController@index')->name('admin.index');
-Route::get('/admin/basic', 'AdminBasicController@index')->name('admin.basic.index');
-Route::put('/admin/basic', 'AdminBasicController@update')->name('admin.basic.update');
+Route::get('/admin/password', 'AdminPasswordController@index')->name('admin.password.index');
+Route::put('/admin/password', 'AdminPasswordController@update')->name('admin.password.update');
+Route::get('/admin/site', 'AdminSiteController@index')->name('admin.site.index');
+Route::put('/admin/site', 'AdminSiteController@update')->name('admin.site.update');
+
 
 Route::get('/admin/user', 'AdminUserController@index')->name('admin.user.index');
 Route::put('/admin/user', 'AdminUserController@update')->name('admin.user.update');
 
 // Category
-Route::get('/admin/categories', 'AdminCategoryController@index')->name('admin.categories.index');
-Route::get('/admin/categories/create', 'AdminCategoryController@create')->name('admin.categories.create');
-Route::post('/admin/categories', 'AdminCategoryController@store')->name('admin.categories.store');
-Route::get('/admin/categories/edit/{id}', 'AdminCategoryController@edit')->name('admin.categories.edit');
-Route::put('/admin/categories/edit/{id}', 'AdminCategoryController@update')->name('admin.categories.update');
-Route::delete('/admin/categories/{id}', 'AdminCategoryController@destroy')->name('admin.categories.delete');
+Route::get('/admin/category', 'AdminCategoryController@index')->name('admin.category.index');
+Route::get('/admin/category/create', 'AdminCategoryController@create')->name('admin.category.create');
+Route::post('/admin/category', 'AdminCategoryController@store')->name('admin.category.store');
+Route::get('/admin/category/edit/{id?}', 'AdminCategoryController@edit')->name('admin.category.edit');
+Route::put('/admin/category/edit/{id?}', 'AdminCategoryController@update')->name('admin.category.update');
+Route::delete('/admin/category/{id?}', 'AdminCategoryController@destroy')->name('admin.category.delete');
 
 // Post
-Route::get('/admin/posts', 'AdminPostController@index')->name('admin.post.index');
-Route::get('/admin/posts/create', 'AdminPostController@create')->name('admin.post.create');
-Route::post('/admin/posts', 'AdminPostController@store')->name('admin.post.store');
-Route::get('/admin/posts/edit/{id}', 'AdminPostController@edit')->name('admin.post.edit');
-Route::put('/admin/posts/edit/{id}', 'AdminPostController@update')->name('admin.post.update');
-Route::delete('/admin/posts/delete/{id}', 'AdminPostController@destroy')->name('admin.post.delete');
+Route::get('/admin/post', 'AdminPostController@index')->name('admin.post.index');
+Route::get('/admin/post/create', 'AdminPostController@create')->name('admin.post.create');
+Route::post('/admin/post', 'AdminPostController@store')->name('admin.post.store');
+Route::get('/admin/post/edit/{id?}', 'AdminPostController@edit')->name('admin.post.edit');
+Route::put('/admin/post/edit/{id?}', 'AdminPostController@update')->name('admin.post.update');
+Route::delete('/admin/post/delete/{id?}', 'AdminPostController@destroy')->name('admin.post.delete');
 
+// Tag
+Route::get('/admin/tag', 'AdminTagController@index')->name('admin.tag.index');
+Route::get('/admin/tag/create', 'AdminTagController@create')->name('admin.tag.create');
+Route::post('/admin/tag', 'AdminTagController@store')->name('admin.tag.store');
+Route::get('/admin/tag/edit/{id?}', 'AdminTagController@edit')->name('admin.tag.edit');
+Route::put('/admin/tag/edit/{id?}', 'AdminTagController@update')->name('admin.tag.update');
+Route::delete('/admin/tag/delete/{id?}', 'AdminTagController@destroy')->name('admin.tag.delete');
+
+// Image
+Route::get('/admin/image', 'AdminImageController@index')->name('admin.image.index');
+Route::post('/admin/image', 'AdminImageController@store')->name('admin.image.store');
+Route::put('/admin/image/edit/{id?}', 'AdminImageController@update')->name('admin.image.update');
+Route::delete('/admin/image/{id?}', 'AdminImageController@destroy')->name('admin.image.delete');
+
+
+// Comment
+Route::get('admin/comment', 'AdminCommentController@index')->name('admin.comment.index');
+Route::delete('admin/comment/{id}', 'AdminCommentController@destroy')->name('admin.comment.index');
+Route::post('/{id}/comment', 'CommentController@store')->name('post.comment.store');
 Route::get('/{link}', 'PostController@show')->name('post.detail');
+
+// Template
+Route::resource('/admin/template', 'AdminTemplateController');
