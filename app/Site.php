@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Site extends Model
 {
     //
-    protected $fillable = ['title', 'phrase'];
+    protected $fillable = ['title', 'phrase', 'template_id'];
 }

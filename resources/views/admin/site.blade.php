@@ -27,25 +27,33 @@
                         </ul>
                     </div>
                 @endif
-                <!-- /.box-header -->
+            <!-- /.box-header -->
                 <!-- form start -->
                 {{Form::open(['method' => 'put', 'action' => 'AdminSiteController@update'])}}
                 {{Form::token()}}
                 <div class="box-body">
-                        <div class="form-group">
-                            <label for="title">サイトタイトル</label>
-                            <input type="text" name="title" class="form-control" id="sitetitle" placeholder="サイトタイトル" value="{{ old('title', $site->title) }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="catchphrase">キャッチフレーズ</label>
-                            <input type="text" name="phrase" class="form-control" id="phrase" placeholder="キャッチフレーズ" value="{{ old('phrase', $site->phrase) }}">
-                        </div>
+                    <div class="form-group">
+                        <label for="title">サイトタイトル</label>
+                        <input type="text" name="title" class="form-control" id="sitetitle" placeholder="サイトタイトル"
+                               value="{{ old('title', $site->title) }}">
                     </div>
-                    <!-- /.box-body -->
+                    <div class="form-group">
+                        <label for="catchphrase">キャッチフレーズ</label>
+                        <input type="text" name="phrase" class="form-control" id="phrase" placeholder="キャッチフレーズ"
+                               value="{{ old('phrase', $site->phrase) }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="template_id">
+                            テンプレート
+                        </label>
+                        {{Form::select('template_id', $templates, '1')}}
+                    </div>
+                </div>
+                <!-- /.box-body -->
 
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">更新</button>
-                    </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">更新</button>
+                </div>
                 {{Form::close()}}
             </div>
             <!-- /.box -->

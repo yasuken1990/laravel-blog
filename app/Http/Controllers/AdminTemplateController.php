@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Template;
+use App\Site;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -43,7 +44,7 @@ class AdminTemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -83,7 +84,7 @@ class AdminTemplateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -94,7 +95,7 @@ class AdminTemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -122,17 +123,17 @@ class AdminTemplateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         try {
             $this->validate($request, [
-                'name' => ['required', 'max:255', Rule::unique('templates')->ignore($id),],
-                'top' => 'required',
-                'detail' => 'required',
+                'name' => 'required', 'max:255', Rule::unique('templates')->ignore($id),
+                'top' => 'required', Rule::unique('templates')->ignore($id),
+                'detail' => 'required', Rule::unique('templates')->ignore($id),
             ]);
 
             // Do template Edit.
@@ -143,6 +144,13 @@ class AdminTemplateController extends Controller
             $template->js = $request->input('js');
             $template->css = $request->input('css');
             $template->save();
+
+            $site = Site::firstOrFail();
+
+            // いま設定中のtemplateの場合、即時反映する.
+            if ($template->id === $site->template_id) {
+                Template::updateTemplateFiles($template);
+            }
 
             return back()->with('success', '更新完了！');
 
@@ -171,7 +179,7 @@ class AdminTemplateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
