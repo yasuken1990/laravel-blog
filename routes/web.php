@@ -10,8 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', 'FrontController@index')->name('index');
-
 Auth::routes();
 
 Route::get('/admin', 'AdminController@index')->name('admin.index');
@@ -63,3 +61,6 @@ Route::get('/{link}', 'PostController@show')->name('post.detail');
 
 // Template
 Route::resource('/admin/template', 'AdminTemplateController');
+
+
+Route::get('/{date?}', 'FrontController@index')->name('index');

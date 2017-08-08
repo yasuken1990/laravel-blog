@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Site;
 use App\Post;
@@ -14,18 +15,21 @@ class FrontController extends Controller
     const PAGINATION_PER_PAGE = 5;
 
     //
-    public function index()
+    public function index($date = '2017-07')
     {
         try {
             $site = Site::firstOrFail();
 
             if (Auth::check()) {
 
-                $posts = Post::paginate(self::PAGINATION_PER_PAGE);
+                $posts = Post::whereBetween('created_at', [$date . '-01', $date . '-31 23:59:59'])
+                    ->paginate(self::PAGINATION_PER_PAGE);
 
             } else {
 
-                $posts = Post::where('status', Post::STATUS_PUBLIC)->paginate(self::PAGINATION_PER_PAGE);
+                $posts = Post::where('status', Post::STATUS_PUBLIC)
+                    ->whereBetween('created_at', [$date . '-01', $date . '-31 23:59:59'])
+                    ->paginate(self::PAGINATION_PER_PAGE);
 
             }
 
@@ -46,4 +50,5 @@ class FrontController extends Controller
             return abort(404);
         }
     }
+
 }
