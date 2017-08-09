@@ -17,6 +17,8 @@ class FrontController extends Controller
     //
     public function index()
     {
+        $archiveDates = Post::getArchiveDates();
+
         try {
             $site = Site::firstOrFail();
 
@@ -30,7 +32,7 @@ class FrontController extends Controller
 
             }
 
-            return view('index', compact('site', 'posts'));
+            return view('index', compact('site', 'posts', 'archiveDates'));
 
         } catch (ModelNotFoundException $e) {
             Log::error($e->getMessage());
@@ -49,6 +51,8 @@ class FrontController extends Controller
     public function archive($date = NULL)
     {
         try {
+
+            $archiveDates = Post::getArchiveDates();
 
             $site = Site::firstOrFail();
 
@@ -100,8 +104,8 @@ class FrontController extends Controller
             return abort(404);
 
         }
-        
-        return view('index', compact('site', 'posts'));
+
+        return view('index', compact('site', 'posts', 'archiveDates'));
 
     }
 

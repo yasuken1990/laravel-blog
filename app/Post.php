@@ -43,4 +43,20 @@ class Post extends Model
     {
         return self::$statusLabels[$this->status];
     }
+
+    public static function getArchiveDates()
+    {
+
+        $archives = Post::where('status', Post::STATUS_PUBLIC)
+            ->orderBy('created_at')->get()
+            ->groupBy(function ($post) {
+                return $post->created_at->format('Y-m');
+            })->toArray();
+
+        foreach ($archives as $date => $archive) {
+            $archives[$date] = count($archive);
+        }
+
+        return $archives;
+    }
 }

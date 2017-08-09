@@ -9,7 +9,7 @@
 
     <title>{{ $site->title }}</title>
 
-{!! \File::get(public_path('css/main.css')) !!}
+    {!! \File::get(public_path('css/main.css')) !!}
 
 @endsection
 @section('body')
@@ -18,7 +18,8 @@
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     Menu <i class="fa fa-bars"></i>
                 </button>
@@ -68,30 +69,47 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 @forelse($posts as $post)
-                <div class="post-preview">
-                    <a href="{{ url('/' . $post->link) }}">
-                        <h2 class="post-title">
-                            {{ $post->title }}
-                        </h2>
-                    </a>
+                    <div class="post-preview">
+                        <a href="{{ url('/' . $post->link) }}">
+                            <h2 class="post-title">
+                                {{ $post->title }}
+                            </h2>
+                        </a>
                         <h3 class="post-subtitle">
                             {{ mb_strimwidth(strip_tags($post->content), 0, 200, '...', 'UTF-8') }}
                         </h3>
-                    <p class="post-meta">投稿日時 : {{ $post->created_at }}</p>
-                </div>
-                <hr>
+                        <p class="post-meta">投稿日時 : {{ $post->created_at }}</p>
+                    </div>
+                    <hr>
                 @empty
                     none
-                @endforelse
-                <!-- Pager -->
+            @endforelse
+            <!-- Pager -->
                 <ul class="pager">
-                        {{ $posts->appends(['sort' => 'votes'])->links() }}
+                    {{ $posts->appends(['sort' => 'votes'])->links() }}
                 </ul>
             </div>
         </div>
     </div>
 
     <hr>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h3>archives</h3>
+                <ul class="list-inline text-center">
+                    @forelse($archiveDates as $date => $count)
+                        <li><a href="{{ url('/archive/' . $date) }}">{{ $date }}({{ $count }})</a></li>
+                    @empty
+                        none
+                    @endforelse
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+
 
     <!-- Footer -->
     <footer>
@@ -130,6 +148,6 @@
         </div>
     </footer>
 
-{!! \File::get(public_path('js/main.js')) !!}
+    {!! \File::get(public_path('js/main.js')) !!}
 
 @endsection
