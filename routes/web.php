@@ -12,6 +12,10 @@
 */
 Auth::routes();
 
+Route::get('/', 'FrontController@index')->name('index');
+Route::get('/archive/{date?}', 'FrontController@archive')->name('index');
+
+
 Route::get('/admin', 'AdminController@index')->name('admin.index');
 Route::get('/admin/password', 'AdminPasswordController@index')->name('admin.password.index');
 Route::put('/admin/password', 'AdminPasswordController@update')->name('admin.password.update');
@@ -63,4 +67,3 @@ Route::get('/{link}', 'PostController@show')->name('post.detail');
 Route::resource('/admin/template', 'AdminTemplateController');
 
 
-Route::get('/{date?}', 'FrontController@index')->name('index');
