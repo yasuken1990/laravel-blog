@@ -57,8 +57,8 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
                         <h1>{!! $post->title !!}</h1>
-                        <h2 class="subheading">カテゴリ：{!! $post->category->name !!}</h2>
-                        <h3 class="subheading">タグ：
+                        <h2 class="subheading">Category：{!! $post->category->name !!}</h2>
+                        <h3 class="subheading">Tag：
                             @forelse($tags as $tag)
                                 @if(in_array($tag->id, $selectedTags))
                                     {{ $tag->name . ' ' }}
@@ -66,7 +66,7 @@
                             @empty
                             @endforelse
                         </h3>
-                        <span class="meta">Posted by <a href="#"></a>{{ $post->created_at }}</span>
+                        <span class="meta">Posted at <a href="#"></a>{{ $post->created_at }}</span>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
 
     <article>
         <div class="container">
-            <h3>コメント</h3>
+            <h3>Comment</h3>
             <ul>
                 @forelse ($post->comments as $comment)
                     <li>
@@ -103,19 +103,19 @@
             <form method="post" action="{{ action('CommentController@store', $post->id) }}">
                 {{ csrf_field() }}
                 <p>
-                    <input type="text" name="name" placeholder="名前" value="{{ old('name') }}">
+                    <input type="text" name="name" placeholder="name" value="{{ old('name') }}">
                     @if ($errors->has('name'))
                         <span class="error">{{ $errors->first('name') }}</span>
                     @endif
                 </p>
                 <p>
-                    <input type="text" name="body" placeholder="コメント内容" value="{{ old('body') }}">
+                    <input type="text" name="body" placeholder="comment" value="{{ old('body') }}">
                     @if ($errors->has('body'))
                         <span class="error">{{ $errors->first('body') }}</span>
                     @endif
                 </p>
                 <p>
-                    <input type="submit" value="投稿">
+                    <input type="submit" value="submit">
                 </p>
             </form>
         </div>
