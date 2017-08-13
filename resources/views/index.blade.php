@@ -107,9 +107,51 @@
                 </ul>
             </div>
         </div>
-    </div>
-    <hr>
+        {{ $year }}-{{ $month }}
+        <br>
+        <br>
+        <div class="calendar">
+            <table>
+                <tr>
+                    <th>Su</th>
+                    <th>Mo</th>
+                    <th>Tu</th>
+                    <th>We</th>
+                    <th>Th</th>
+                    <th>Fr</th>
+                    <th>Sa</th>
+                </tr>
 
+                <tr>
+                    @php
+                        $cnt = 0;
+                    @endphp
+                    @foreach ($calendar as $key => $value)
+                        <td>
+                            @php
+                                $cnt++;
+                            @endphp
+                            @if ($value['post'] === true)
+                                <a href="{{ url('/archive_day/' . $value['date']) }}">{{ $value['day'] }}</a>
+                            @else
+                                {{ $value['day'] }}
+                            @endif
+                        </td>
+
+                        @if ($cnt == 7)
+                </tr>
+                <tr>
+                    @php
+                        $cnt = 0;
+                    @endphp
+                    @endif
+                    @endforeach
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <hr>
 
     <!-- Footer -->
     <footer>

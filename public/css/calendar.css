@@ -1,0 +1,12 @@
+.calendar table {
+    width: 100%;
+}
+.calendar table th {
+    background: #EEEEEE;
+}
+.calendar table th,
+table td {
+    border: 1px solid #CCCCCC;
+    text-align: center;
+    padding: 5px;
+}

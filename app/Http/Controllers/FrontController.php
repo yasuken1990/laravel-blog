@@ -18,7 +18,7 @@ class FrontController extends Controller
     public function index()
     {
         $archiveDates = Post::getArchiveDates();
-
+        list($calendar, $year, $month) = $this->getCalendar();
         try {
             $site = Site::firstOrFail();
 
@@ -32,7 +32,7 @@ class FrontController extends Controller
 
             }
 
-            return view('index', compact('site', 'posts', 'archiveDates'));
+            return view('index', compact('site', 'posts', 'archiveDates', 'calendar', 'year', 'month'));
 
         } catch (ModelNotFoundException $e) {
             Log::error($e->getMessage());
@@ -48,11 +48,67 @@ class FrontController extends Controller
         }
     }
 
+    public function archiveDay($date = NULL)
+    {
+        try {
+
+            $archiveDates = Post::getArchiveDates();
+            list($calendar, $year, $month) = $this->getCalendar();
+
+            $site = Site::firstOrFail();
+
+            $pattern = '^([1-9][0-9]{3})-([0-1][0-9])-([0-3][0-9])';
+
+            // YYYY-MM-DD チェック
+            if (preg_match("#{$pattern}#", $date, $match)) {
+                if (!checkdate($match[2], 1, $match[1])) {
+                    return back();
+                }
+            } else {
+                return back();
+            }
+
+            $startDate = Carbon::parse($date)->format('Y-m-d 00:00:00');
+            $endDate = Carbon::parse($date)->format('Y-m-d 23:59:59');
+
+            if (Auth::check()) {
+
+                $posts = Post::whereBetween('created_at', [$startDate, $endDate])
+                    ->paginate(self::PAGINATION_PER_PAGE);
+
+            } else {
+
+                $posts = Post::where('status', Post::STATUS_PUBLIC)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->paginate(self::PAGINATION_PER_PAGE);
+
+            }
+
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return abort(404);
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return abort(404);
+
+        }
+
+        return view('index', compact('site', 'posts', 'archiveDates', 'calendar', 'year', 'month'));
+
+    }
+
+
     public function archive($date = NULL)
     {
         try {
 
             $archiveDates = Post::getArchiveDates();
+            list($calendar, $year, $month) = $this->getCalendar();
 
             $site = Site::firstOrFail();
 
@@ -105,8 +161,68 @@ class FrontController extends Controller
 
         }
 
-        return view('index', compact('site', 'posts', 'archiveDates'));
+        return view('index', compact('site', 'posts', 'archiveDates', 'calendar', 'year', 'month'));
 
     }
 
+    public function getCalendar()
+    {
+
+        foreach (Post::getArchivePostsDates() as $date => $post) {
+            $day = (int)Carbon::parse($post['created_at'])->format('j');
+            $postDate[$day] = Carbon::parse($post['created_at'])->format('Y-m-d');
+        }
+
+        $year = Carbon::now()->format('Y');
+        $month = Carbon::now()->format('m');
+
+        $last_day = date('j', mktime(0, 0, 0, $month + 1, 0, $year));
+
+        $calendar = array();
+        $j = 0;
+
+        for ($i = 1; $i < $last_day + 1; $i++) {
+
+            $week = date('w', mktime(0, 0, 0, $month, $i, $year));
+
+            if ($i == 1) {
+
+                for ($s = 1; $s <= $week; $s++) {
+
+                    $calendar[$j]['day'] = '';
+                    $calendar[$j]['post'] = false;
+                    $j++;
+
+                }
+
+            }
+
+            $calendar[$j]['day'] = $i;
+
+            if (array_key_exists($i, $postDate)) {
+                $calendar[$j]['post'] = true;
+                $calendar[$j]['date'] = $postDate[$i];
+            } else {
+                $calendar[$j]['post'] = false;
+            }
+
+            $j++;
+
+            if ($i == $last_day) {
+
+                for ($e = 1; $e <= 6 - $week; $e++) {
+
+                    $calendar[$j]['day'] = '';
+                    $calendar[$j]['post'] = false;
+                    $j++;
+
+                }
+
+            }
+
+        }
+
+        return array($calendar, $year, $month);
+
+    }
 }

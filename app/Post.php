@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -56,6 +57,18 @@ class Post extends Model
         foreach ($archives as $date => $archive) {
             $archives[$date] = count($archive);
         }
+
+        return $archives;
+    }
+
+    public static function getArchivePostsDates($date = NULL)
+    {
+        if ($date === NULL) {
+            $date = Carbon::now()->format('Y-m-01 00:00:00');
+        }
+        $archives = Post::where('status', Post::STATUS_PUBLIC)
+            ->where('created_at', '>', $date)
+            ->orderBy('created_at')->get()->toArray();
 
         return $archives;
     }
