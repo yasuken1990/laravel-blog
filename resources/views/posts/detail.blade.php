@@ -24,7 +24,7 @@
                     <span class="sr-only">Toggle navigation</span>
                     Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="/">Start Bootstrap</a>
+                <a class="navbar-brand" href="/">{{ $site->title }}</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -155,7 +155,7 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright © Your Website 2016</p>
+                    <p class="copyright text-muted">Copyright © {{ $site->title }} {{ \Carbon\Carbon::now()->format('Y') }}</p>
                 </div>
             </div>
         </div>

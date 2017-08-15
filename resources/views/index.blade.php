@@ -23,7 +23,7 @@
                     <span class="sr-only">Toggle navigation</span>
                     Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="{{ url('/') }}">Start Bootstrap</a>
+                <a class="navbar-brand" href="{{ url('/') }}">{{ $site->title }}</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -78,7 +78,7 @@
                         <h3 class="post-subtitle">
                             {{ mb_strimwidth(strip_tags($post->content), 0, 200, '...', 'UTF-8') }}
                         </h3>
-                        <p class="post-meta">投稿日時 : {{ $post->created_at }}</p>
+                        <p class="post-meta">Posted at : {{ $post->created_at }}</p>
                     </div>
                     <hr>
                 @empty
@@ -92,6 +92,23 @@
         </div>
     </div>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>search</h2>
+                <div id="custom-search-input">
+                    <div class="input-group col-md-12">
+                        <input type="text" class="form-control input-lg" placeholder="Buscar" />
+                        <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <hr>
 
     <div class="container">
@@ -184,7 +201,7 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright © Your Website 2016</p>
+                    <p class="copyright text-muted">Copyright © {{ $site->title }} {{ \Carbon\Carbon::now()->format('Y') }}</p>
                 </div>
             </div>
         </div>
