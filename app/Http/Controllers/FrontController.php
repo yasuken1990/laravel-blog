@@ -17,9 +17,11 @@ class FrontController extends Controller
     //
     public function index()
     {
-        $archiveDates = Post::getArchiveDates();
-        list($calendar, $year, $month) = $this->getCalendar();
         try {
+
+            $archiveDates = Post::getArchiveDates();
+            list($calendar, $year, $month) = $this->getCalendar();
+
             $site = Site::firstOrFail();
 
             if (Auth::check()) {
@@ -29,6 +31,51 @@ class FrontController extends Controller
             } else {
 
                 $posts = Post::where('status', Post::STATUS_PUBLIC)->paginate(self::PAGINATION_PER_PAGE);
+
+            }
+
+            return view('index', compact('site', 'posts', 'archiveDates', 'calendar', 'year', 'month'));
+
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return abort(404);
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return abort(404);
+        }
+    }
+
+    public function search(Request $request)
+    {
+        try {
+
+            $keyword = $request->input('keyword');
+
+            $archiveDates = Post::getArchiveDates();
+            list($calendar, $year, $month) = $this->getCalendar();
+
+
+            $site = Site::firstOrFail();
+
+            $query = Post::query();
+            $query->where('status', Post::STATUS_PUBLIC)
+                ->where(function($post) use ($keyword) {
+                    $post->orWhere('title', 'like', "%{$keyword}%")
+                        ->orwhere('content', 'like', "%{$keyword}%");
+                });
+
+            if (Auth::check()) {
+
+                $posts = $query::paginate(self::PAGINATION_PER_PAGE);
+
+            } else {
+
+                $posts = $query->paginate(self::PAGINATION_PER_PAGE);
 
             }
 

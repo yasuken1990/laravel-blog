@@ -13,8 +13,9 @@
 Auth::routes();
 
 Route::get('/', 'FrontController@index')->name('index');
-Route::get('/archive/{date?}', 'FrontController@archive')->name('index');
-Route::get('/archive_day/{date?}', 'FrontController@archiveDay')->name('index');
+Route::post('/search', 'FrontController@search')->name('search');
+Route::get('/archive/{date?}', 'FrontController@archive')->name('archive');
+Route::get('/archive_day/{date?}', 'FrontController@archiveDay')->name('archive_day');
 
 
 

@@ -98,12 +98,9 @@
                 <h2>search</h2>
                 <div id="custom-search-input">
                     <div class="input-group col-md-12">
-                        <input type="text" class="form-control input-lg" placeholder="Buscar" />
-                        <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="button">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </span>
+                        {!! Form::open(['url' => 'search', 'method' => 'post']) !!}
+                        <input type="text" name="keyword" id="keyword" class="form-control input-lg" placeholder="Keyword"/>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
@@ -201,7 +198,8 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright © {{ $site->title }} {{ \Carbon\Carbon::now()->format('Y') }}</p>
+                    <p class="copyright text-muted">Copyright
+                        © {{ $site->title }} {{ \Carbon\Carbon::now()->format('Y') }}</p>
                 </div>
             </div>
         </div>
