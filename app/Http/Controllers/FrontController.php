@@ -246,7 +246,7 @@ class FrontController extends Controller
 
             $calendar[$j]['day'] = $i;
 
-            if (array_key_exists($i, $postDate)) {
+            if (isset($postDate) && array_key_exists($i, $postDate)) {
                 $calendar[$j]['post'] = true;
                 $calendar[$j]['date'] = $postDate[$i];
             } else {
