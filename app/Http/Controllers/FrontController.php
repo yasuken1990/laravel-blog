@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Carbon\Carbon;
+use function foo\func;
 use Illuminate\Http\Request;
 use App\Site;
 use App\Post;
+use App\Tag;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -62,11 +65,24 @@ class FrontController extends Controller
 
             $site = Site::firstOrFail();
 
+            $categoryIds = Category::where('name', 'like', "%{$keyword}%")->get(['id'])->toArray();
+
+            $tagIds = Tag::where('name', 'like', "%{$keyword}%")->get();
+
+            $tagPostIds = [];
+            foreach ($tagIds as $tag) {
+                foreach ($tag->posts as $key => $post) {
+                    $tagPostIds[] = $post->id;
+                }
+            }
             $query = Post::query();
             $query->where('status', Post::STATUS_PUBLIC)
-                ->where(function($post) use ($keyword) {
+                ->where(function ($post) use ($keyword, $categoryIds, $tagPostIds) {
                     $post->orWhere('title', 'like', "%{$keyword}%")
-                        ->orwhere('content', 'like', "%{$keyword}%");
+                        ->orWhere('content', 'like', "%{$keyword}%")
+                        ->whereIn('category_id', $categoryIds)
+                        ->whereIn('id', $tagPostIds);
+
                 });
 
             if (Auth::check()) {
