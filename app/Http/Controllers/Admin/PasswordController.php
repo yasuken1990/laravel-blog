@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
 
-class AdminUserController extends Controller
+class PasswordController extends Controller
 {
+    //
     public function __construct()
     {
         $this->middleware('auth');
@@ -18,15 +20,15 @@ class AdminUserController extends Controller
     public function index()
     {
         try {
-            $user = User::firstOrFail();
+            $user = User::findOrFail(1);
 
-            return view('admin.user', compact('user'));
+            return view('admin.password', compact('user'));
 
         } catch (ModelNotFoundException $e) {
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
 
-            return back()->with('error', '管理ユーザが存在しません。深刻なエラーです！今すぐ管理者に連絡してください！');
+            return back()->with('error', 'ユーザが存在しません。深刻なエラーです！今すぐ管理者に連絡してください！');
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -41,28 +43,19 @@ class AdminUserController extends Controller
     {
         try {
             $this->validate($request, [
-                'name' => 'required',
-                'email' => 'required',
+                'password' => 'required',
             ]);
 
-            $user = User::firstOrFail();
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->save();
+            $request->user()->fill([
+                'password' => Hash::make($request->password)
+            ])->save();
 
-            return redirect('admin/user')->with('success', '更新完了！');
-
+            return redirect('admin/password')->with('success', '更新完了！');
         } catch (ValidationException $e) {
             Log::warning($e->getMessage());
             Log::warning($e->getTraceAsString());
 
             return back();
-
-        } catch (ModelNotFoundException $e) {
-            Log::error($e->getMessage());
-            Log::error($e->getTraceAsString());
-
-            return back()->with('error', 'ユーザが存在しません。深刻なエラーです！今すぐ管理者に連絡してください！');
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());

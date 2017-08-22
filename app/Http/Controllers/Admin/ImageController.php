@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Faker\Provider\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -9,7 +10,7 @@ use Intervention\Image\Facades\Image;
 use Intervention\Image\Exception\NotReadableException;
 use Illuminate\Support\Facades\Log;
 
-class AdminImageController extends Controller
+class ImageController extends Controller
 {
 
     const PAGINATION_PER_PAGE = 5;

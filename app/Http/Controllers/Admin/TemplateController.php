@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Template;
 use App\Site;
@@ -9,7 +10,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class AdminTemplateController extends Controller
+class TemplateController extends Controller
 {
 
     const PAGINATION_PER_PAGE = 10;

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
+use App\Http\Controllers\Controller;
 use App\Category;
 use Carbon\Carbon;
 use function foo\func;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-class FrontController extends Controller
+class HomeController extends Controller
 {
     const PAGINATION_PER_PAGE = 5;
 

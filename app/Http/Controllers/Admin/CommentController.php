@@ -1,17 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Post;
-use App\Site;
-use App\Tag;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Comment;
 
-class PostController extends Controller
+class CommentController extends Controller
 {
+
+    const PAGINATION_PER_PAGE = 10;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +23,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $comments = Comment::paginate(self::PAGINATION_PER_PAGE);
+
+        return view('admin.comments.index', compact('comments'));
     }
 
     /**
@@ -49,41 +55,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($link)
+    public function show($id)
     {
         //
-        try {
-            if (Auth::check()) {
-
-                $post = Post::where('link', $link)->firstOrFail();
-
-            } else {
-
-                $post = Post::where('link', $link)->where('status', Post::STATUS_PUBLIC)->firstOrFail();
-
-            }
-
-            $site = Site::firstOrFail();
-            $selectedTags = $post->tags()->pluck('id')->toArray();
-            $tags = Tag::all();
-
-            return view('posts.detail', compact('post', 'site', 'tags', 'selectedTags'));
-
-        } catch (ModelNotFoundException $e) {
-            Log::error($e->getMessage());
-            Log::error($e->getTraceAsString());
-
-            return abort(404);
-
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            Log::error($e->getTraceAsString());
-
-            // TODO フロントだし、500がいいかな…
-            // https://readouble.com/laravel/5.4/ja/errors.html
-            return back()->with('error', 'System error has occured. Please contact the system administrator.');
-
-        }
     }
 
     /**
@@ -117,6 +91,18 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            // Do Post Delete.
+            Comment::destroy($id);
+
+            return redirect('admin/comment');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return back()->with('error', '削除できませんでした。');
+
+        }
     }
 }
