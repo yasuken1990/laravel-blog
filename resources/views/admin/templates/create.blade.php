@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                {{Form::open(['method' => 'template', 'files' => true, 'action' => 'AdminTemplateController@store'])}}
+                {{Form::open(['method' => 'template', 'files' => true, 'action' => 'Admin\TemplateController@store'])}}
                 {{Form::token()}}
 
                 <div class="box-body">

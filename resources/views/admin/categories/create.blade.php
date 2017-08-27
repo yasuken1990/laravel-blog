@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                {{Form::open(['method' => 'post', 'action' => 'AdminCategoryController@store'])}}
+                {{Form::open(['method' => 'post', 'action' => 'Admin\CategoryController@store'])}}
                 {{Form::token()}}
 
                 <div class="box-body">

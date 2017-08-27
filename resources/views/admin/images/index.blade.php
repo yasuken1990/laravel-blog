@@ -23,7 +23,7 @@
                             <td>{{ $image->name }}</td>
                             <td>{{ $image->created_at }}</td>
                             <td>
-                                <form action="{{ action('AdminImageController@destroy', $image->id) }}" id="form_{{ $image->id }}" method="post">
+                                <form action="{{ action('Admin\ImageController@destroy', $image->id) }}" id="form_{{ $image->id }}" method="post">
                                     {{ method_field('delete') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-danger">削除</button>

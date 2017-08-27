@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <!-- general form elements -->
             <div class="box box-primary">
-                {{Form::open(['method' => 'put', 'action' => ['AdminTemplateController@update', $template->id]])}}
+                {{Form::open(['method' => 'put', 'action' => ['Admin\TemplateController@update', $template->id]])}}
                 {{Form::token()}}
                 <div class="box-header with-border">
                     <h3 class="box-title">テンプレートID: {{ $template->id }}</h3>

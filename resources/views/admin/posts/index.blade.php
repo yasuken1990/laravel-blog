@@ -33,7 +33,7 @@
                             <td>{{ $post->created_at }}</td>
                             <td><button type="button" class="btn btn-primary" value="top" onClick="location.href='{{ url('admin/post/edit/' . $post->id) }}'">編集</button></td>
                             <td>
-                                <form action="{{ action('AdminPostController@destroy', $post->id) }}" id="form_{{ $post->id }}" method="post">
+                                <form action="{{ action('Admin\PostController@destroy', $post->id) }}" id="form_{{ $post->id }}" method="post">
                                     {{ method_field('delete') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-danger">削除</button>

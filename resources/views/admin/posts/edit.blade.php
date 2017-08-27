@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <!-- general form elements -->
             <div class="box box-primary">
-                {{Form::open(['method' => 'put', 'action' => ['AdminPostController@update', $post->id]])}}
+                {{Form::open(['method' => 'put', 'action' => ['Admin\PostController@update', $post->id]])}}
                 {{Form::token()}}
                 <div class="box-header with-border">
                     <h3 class="box-title">記事ID: {{ $post->id }}</h3>
@@ -90,7 +90,7 @@
                     </td>
                     {{Form::close()}}
                     <hr>
-                    {{Form::open(['method' => 'post', 'action' => ['AdminImageController@store'], 'files' => true])}}
+                    {{Form::open(['method' => 'post', 'action' => ['Admin\ImageController@store'], 'files' => true])}}
                     {{Form::token()}}
                     {!! Form::label('fileName', 'アップロード') !!}
                     {!! Form::file('fileName') !!}

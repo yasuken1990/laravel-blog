@@ -23,7 +23,7 @@
                             <td>{{ $template->created_at }}</td>
                             <td><button type="button" class="btn btn-primary" value="top" onClick="location.href='{{ url('admin/template/' . $template->id . '/edit') }}'">編集</button></td>
                             <td>
-                                <form action="{{ action('AdminTemplateController@destroy', $template->id) }}" method="post">
+                                <form action="{{ action('Admin\TemplateController@destroy', $template->id) }}" method="post">
                                     {{ method_field('delete') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-danger">削除</button>

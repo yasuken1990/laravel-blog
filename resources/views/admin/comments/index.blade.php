@@ -23,7 +23,7 @@
                             <td>{{ $comment->body }}</td>
                             <td>{{ $comment->created_at }}</td>
                             <td>
-                                <form action="{{ action('AdminCommentController@destroy', $comment->id) }}" id="form_{{ $comment->id }}" method="post">
+                                <form action="{{ action('Admin\CommentController@destroy', $comment->id) }}" id="form_{{ $comment->id }}" method="post">
                                     {{ method_field('delete') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-danger">削除</button>

@@ -27,7 +27,7 @@
                                 </button>
                             </td>
                             <td>
-                                <form action="{{ action('AdminTagController@destroy', $tag->id) }}"
+                                <form action="{{ action('Admin\TagController@destroy', $tag->id) }}"
                                       id="form_{{ $tag->id }}" method="post">
                                     {{ method_field('delete') }}
                                     {{ csrf_field() }}

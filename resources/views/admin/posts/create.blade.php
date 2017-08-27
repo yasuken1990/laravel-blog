@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                {{Form::open(['method' => 'post', 'files' => true, 'action' => 'AdminPostController@store'])}}
+                {{Form::open(['method' => 'post', 'files' => true, 'action' => 'Admin\PostController@store'])}}
                 {{Form::token()}}
 
                 <div class="box-body">
@@ -78,7 +78,7 @@
                     <button type="submit" class="btn btn-primary">作成</button>
                     {{Form::close()}}
                     <hr>
-                    {{Form::open(['method' => 'post', 'action' => ['AdminImageController@store'], 'files' => true])}}
+                    {{Form::open(['method' => 'post', 'action' => ['Admin\ImageController@store'], 'files' => true])}}
                     {{Form::token()}}
                     {!! Form::label('fileName', 'アップロード') !!}
                     {!! Form::file('fileName') !!}

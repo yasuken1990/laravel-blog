@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                {{Form::open(['method' => 'put', 'action' => ['AdminTagController@update', $tag->id]])}}
+                {{Form::open(['method' => 'put', 'action' => ['Admin\TagController@update', $tag->id]])}}
                 {{Form::token()}}
 
                 <div class="box-body">

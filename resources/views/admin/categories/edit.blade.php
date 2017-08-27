@@ -18,7 +18,7 @@
                         {{ session('error') }}
                     </div>
                 @endif
-                {{Form::open(['method' => 'put', 'action' => ['AdminCategoryController@update', $category->id]])}}
+                {{Form::open(['method' => 'put', 'action' => ['Admin\CategoryController@update', $category->id]])}}
                 {{Form::token()}}
                 <div class="box-header with-border">
                     <h3 class="box-title">カテゴリID: {{ $category->id }}</h3>

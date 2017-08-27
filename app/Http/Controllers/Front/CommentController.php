@@ -48,7 +48,7 @@ class CommentController extends Controller
         $post->comments()->save($comment);
 
         return redirect()
-            ->action('PostController@show', $post->link);
+            ->action('Front\PostController@show', $post->link);
     }
 
     /**

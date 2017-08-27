@@ -29,7 +29,7 @@
                 @endif
             <!-- /.box-header -->
                 <!-- form start -->
-                {{Form::open(['method' => 'put', 'action' => 'AdminSiteController@update'])}}
+                {{Form::open(['method' => 'put', 'action' => 'Admin\SiteController@update'])}}
                 {{Form::token()}}
                 <div class="box-body">
                     <div class="form-group">
